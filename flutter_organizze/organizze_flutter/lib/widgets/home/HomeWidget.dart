@@ -25,6 +25,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     _fabButtonWidget = FabButtonWidget();
     _homeBloc = HomeBloc();
     _homeBloc.addListenerAuthOnChange();
+    _homeBloc.listenMovements();
     listenBloc();
   }
 

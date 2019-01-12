@@ -14,8 +14,8 @@ class User {
   User.fromMap(Map<String, dynamic> map) {
     _name = map['name'];
     _email = map['email'];
-    _totalExpenditure = map['totalExpenditure'];
-    _totalIncoming = map['totalIncoming'];
+    _totalExpenditure = map['totalExpenditure'].toDouble();
+    _totalIncoming = map['totalIncoming'].toDouble();
   }
 
   String get name => _name;

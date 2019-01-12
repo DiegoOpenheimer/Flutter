@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:organizze_flutter/components/Toast.dart';
 import 'package:organizze_flutter/model/Movement.dart';
 import 'package:organizze_flutter/widgets/Revenue_and_Expense/EntityBloc.dart';
+import 'package:organizze_flutter/Utils/DateCustom.dart';
 
 class EntityWidget extends StatefulWidget {
 
@@ -24,7 +25,7 @@ class _EntityWidgetState extends State<EntityWidget> {
 
   EntityBloc _entityBloc;
   TextEditingController _value = TextEditingController();
-  TextEditingController _date = TextEditingController();
+  TextEditingController _date = TextEditingController(text: DateCustom.formatterDate(new DateTime.now()));
   TextEditingController _category = TextEditingController();
   TextEditingController _description = TextEditingController();
 
@@ -32,6 +33,17 @@ class _EntityWidgetState extends State<EntityWidget> {
   void initState() {
     super.initState();
     _entityBloc = EntityBloc();
+    _entityBloc.stream.listen((int value) {
+      if (value == STOP_LOADING_AND_GO_OUT_PAGE) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _entityBloc.close();
   }
 
   @override
@@ -46,12 +58,30 @@ class _EntityWidgetState extends State<EntityWidget> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
           body: _buildBody(),
-          floatingActionButton: showFab ? FloatingActionButton(
-            onPressed: () => pressFloatActionButton(),
-            child: Icon(Icons.add, color: Colors.white,),
-          ) : null,
+          floatingActionButton: showFab ? _floatingActionButton() : null,
           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         ),
+      ),
+    );
+  }
+
+  FloatingActionButton _floatingActionButton() {
+    return FloatingActionButton(
+      onPressed: () => _entityBloc.currentValue == STOP_LOADING ? pressFloatActionButton() : null,
+      child: StreamBuilder(
+          stream: _entityBloc.stream,
+          initialData: STOP_LOADING,
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            int value = snapshot.data == STOP_LOADING || snapshot.data == STOP_LOADING_AND_GO_OUT_PAGE ? 0 : 1;
+            return AnimatedCrossFade(
+              duration: Duration(milliseconds: 300),
+              alignment: Alignment.center,
+              sizeCurve: Curves.decelerate,
+              firstChild: Icon(Icons.add, color: Colors.white,),
+              secondChild: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white),),),
+              crossFadeState: value == 0 ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+            );
+          },
       ),
     );
   }
