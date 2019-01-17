@@ -38,7 +38,7 @@ class EntityBloc {
   void _saveMovement(Movement movement) {
     _notifyChanges(START_LOADING);
     currentValue = START_LOADING;
-    _firebaseDatabase.updateRevenueAndExpense(movement)
+    _firebaseDatabase.createMovement(movement)
     .then((_) {
       currentValue = STOP_LOADING_AND_GO_OUT_PAGE;
       _notifyChanges(STOP_LOADING_AND_GO_OUT_PAGE);

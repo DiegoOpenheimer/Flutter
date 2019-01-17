@@ -1,15 +1,30 @@
 import 'package:organizze_flutter/model/Movement.dart';
+import 'package:organizze_flutter/model/User.dart';
 
 class HomeModel {
-
   bool _userIsConnected = true;
 
   String currentKey;
 
   List<Movement> _movements = List();
 
+  User _user;
+
+  bool _loadUser = false;
+
+  HomeModel() {
+    currentKey = '''${DateTime.now().month}$year''';
+  }
+
+  User get user => _user;
+
+  set user(User value) {
+    _user = value;
+  }
+
   int _year = DateTime.now().year;
 
+  bool _loadListMovements = false;
 
   int get year => _year;
 
@@ -27,9 +42,13 @@ class HomeModel {
     _userIsConnected = value;
   }
 
-  HomeModel() {
-    currentKey = '''${DateTime.now().month}$year''';
+  bool get loadListMovements => _loadListMovements;
+
+  set loadListMovements(bool value) => _loadListMovements = value;
+
+  bool get loadUser => _loadUser;
+
+  set loadUser(bool value) {
+    _loadUser = value;
   }
-
-
 }

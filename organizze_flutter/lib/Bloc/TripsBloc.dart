@@ -32,7 +32,6 @@ class TripsBloc {
   }
 
   void setTrips(List<Trip> trips) {
-    print(trips);
     tripsModel.setTrips(trips);
     notifyListeners();
   }

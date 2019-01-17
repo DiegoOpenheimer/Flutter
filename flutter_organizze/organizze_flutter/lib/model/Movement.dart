@@ -5,6 +5,7 @@ class Movement {
   String _description;
   String _type;
   double _value;
+  String _id;
 
   Movement([this._category, this._date, this._description, this._type,
       this._value]);
@@ -47,6 +48,10 @@ class Movement {
     _category = value;
   }
 
+  String get id => _id;
+
+  set id(String id) => _id = id;
+
   Map<String, dynamic> toMap() => {
     'category': _category,
     'date': _date,
@@ -57,7 +62,7 @@ class Movement {
 
   @override
   String toString() {
-    return 'Movement{_category: $_category, _date: $_date, _description: $_description, _type: $_type, _value: $_value}';
+    return 'Movement{_category: $_category, _date: $_date, _description: $_description, _type: $_type, _value: $_value, _id: $_id}';
   }
 
 

@@ -7,13 +7,22 @@ import 'package:organizze_flutter/src/widgets/NewTrip/NewTrip.dart';
 import 'package:organizze_flutter/src/widgets/TripWidget/TripWidget.dart';
 import 'package:organizze_flutter/Bloc/TripsBloc.dart';
 
-class TripsWidgets extends StatelessWidget {
+class TripsWidgets extends StatefulWidget {
+
+  @override
+  TripsWidgetsState createState() => TripsWidgetsState();
+
+}
+
+class TripsWidgetsState extends State<TripsWidgets> {
 
   TripsBloc _tripsBloc = TripsBloc();
   GoogleMapController _googleMapController;
   ScrollController _scrollController = ScrollController();
 
-  TripsWidgets() {
+  @override
+  void initState() {
+    super.initState();
     FlutterStatusbarManager.setColor(Colors.black.withOpacity(0.2),
         animated: true);
     FlutterStatusbarManager.setStyle(StatusBarStyle.LIGHT_CONTENT);
@@ -25,6 +34,14 @@ class TripsWidgets extends StatelessWidget {
         _tripsBloc.changePositionMap(index: result);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if (_googleMapController != null) {
+      _googleMapController.dispose();
+    }
   }
 
   @override

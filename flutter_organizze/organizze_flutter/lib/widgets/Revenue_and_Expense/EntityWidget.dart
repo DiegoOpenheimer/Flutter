@@ -91,7 +91,7 @@ class _EntityWidgetState extends State<EntityWidget> {
       double value = double.parse(_value.text.toString().replaceAll(',', '.'));
       String date = _date.text.toString();
       String category = _category.text.toString();
-      String description = _category.text.toString();
+      String description = _description.text.toString();
       Movement movement = Movement(
           category,
           date,

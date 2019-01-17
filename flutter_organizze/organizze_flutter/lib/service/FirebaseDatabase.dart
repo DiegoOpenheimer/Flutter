@@ -30,7 +30,7 @@ class FirebaseDatabase {
     }
   }
 
-  Future<void> updateRevenueAndExpense(Movement movement) async {
+  Future<void> createMovement(Movement movement) async {
     FirebaseUser firebaseUser = await _firebaseServiceAuth.getCurrentUser();
     DocumentSnapshot snapshot =
         await _firestore.collection("users").document(firebaseUser.uid).get();
@@ -61,5 +61,44 @@ class FirebaseDatabase {
     .document(firebaseUser.uid)
     .collection(key)
     .snapshots();
+  }
+
+  Future<void> removeMovement(Movement movement) async {
+    String key = DateCustom.generateKeyDateWithMonthAndYear(movement.date);
+    FirebaseUser firebaseUser = await _firebaseServiceAuth.getCurrentUser();
+    return _firestore.collection("movements")
+    .document(firebaseUser.uid)
+    .collection(key)
+    .document(movement.id)
+    .delete();
+  }
+
+  Future<void> updateUserAfterRemoveMovement(Movement movement) async {
+    try {
+      FirebaseUser firebaseUser = await _firebaseServiceAuth.getCurrentUser();
+      DocumentSnapshot snapshot = await _firestore.collection("users").document(firebaseUser.uid).get();
+      if (snapshot.exists) {
+        double value = movement.value;
+        User user = User.fromMap(snapshot.data);
+        if (movement.type == 'r') {
+          user.totalIncoming -= value;
+        } else {
+          user.totalExpenditure -= value;
+        }
+        return snapshot.reference.updateData(user.toMap());
+      }
+    } catch(e) {
+      print(e);
+    }
+
+  }
+
+  Future<Stream<DocumentSnapshot>> listenUser() async {
+    FirebaseUser firebaseUser = await _firebaseServiceAuth.getCurrentUser();
+    return _firestore
+        .collection("users")
+        .document(firebaseUser.uid)
+        .snapshots();
+
   }
 }

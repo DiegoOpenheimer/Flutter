@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:organizze_flutter/model/User.dart';
 import 'package:organizze_flutter/widgets/home/HomeBloc.dart';
 import 'package:organizze_flutter/widgets/home/HomeModel.dart';
 import 'package:organizze_flutter/widgets/home/components/CalenderWidget.dart';
 import 'package:organizze_flutter/widgets/home/components/FabButton.dart';
+import 'package:organizze_flutter/widgets/home/components/ListWidget.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -26,6 +28,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     _homeBloc = HomeBloc();
     _homeBloc.addListenerAuthOnChange();
     _homeBloc.listenMovements();
+    _homeBloc.listenUser();
     listenBloc();
   }
 
@@ -75,7 +78,10 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Column(
       children: <Widget>[
         buildContainerHeader(),
-        CalendarWidget(_homeBloc)
+        CalendarWidget(_homeBloc),
+        Expanded(
+          child: ListWidget(bloc: _homeBloc, context: context),
+        ),
       ],
     );
   }
@@ -94,10 +100,43 @@ class _HomeWidgetState extends State<HomeWidget> {
         height: 300,
         child: Stack(
           children: <Widget>[
-            PopupMenu()
+            PopupMenu(),
+            _informationUser()
           ],
         ),
       );
+  }
+
+  StreamBuilder<HomeModel> _informationUser() {
+    return StreamBuilder<HomeModel>(
+      stream: _homeBloc.stream,
+      initialData: _homeBloc.homeModel,
+      builder: (BuildContext context, AsyncSnapshot<HomeModel> snapshot) {
+        HomeModel homeModel = snapshot.data;
+        if (homeModel.loadUser) {
+          return Center(
+            child: Container(
+              height: 50,
+              width: 50,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+          );
+        } else {
+          User user = homeModel.user;
+          return Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(user.name, style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),),
+              SizedBox(height: 20,),
+              Text('R\$ ${(user.totalIncoming - user.totalExpenditure).toStringAsFixed(2)}', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+              Text('Saldo geral', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold))
+            ],
+          ),);
+        }
+      },
+    );
   }
 
   Positioned PopupMenu() {
