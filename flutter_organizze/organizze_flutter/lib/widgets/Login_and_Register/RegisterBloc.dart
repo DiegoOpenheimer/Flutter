@@ -45,7 +45,7 @@ class RegisterBloc {
   void createAccount(User user) async {
     try {
       notifyChanges(_registerModel..isLoading = true);
-      await _firebaseServiceAuth.createAccount(user.email, user.password);
+      await _firebaseServiceAuth.createAccount(user.email, user.password).timeout(const Duration(seconds: 10));
       _helperToast.show('Conta criada com sucesso');
       _firebaseDatabase.createUser(user);
       notifyChanges(_registerModel..isLoading = false..accountCreate = true);

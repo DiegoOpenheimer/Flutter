@@ -42,7 +42,7 @@ class LoginBloc {
   void doLogin(String email, String password) async {
     try {
       notifyChanges(_authWidgetModel..isLoading = true);
-      await _firebaseServiceAuth.signInFirebase(email, password);
+      await _firebaseServiceAuth.signInFirebase(email, password).timeout(const Duration(seconds: 10));
       _helperToast.show('Login efetuado com sucesso');
       notifyChanges(_authWidgetModel..isLoading = false..accountCreate = true);
     } on PlatformException catch(e) {

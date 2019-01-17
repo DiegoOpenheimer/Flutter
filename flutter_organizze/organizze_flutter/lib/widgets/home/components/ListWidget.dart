@@ -19,7 +19,7 @@ class ListWidget extends StatelessWidget {
         List<Movement> movements = snapshot.data.movements;
         if (movements.isNotEmpty) {
           return ListView.builder(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(5),
             itemCount: movements.length,
             itemBuilder: (BuildContext context, int index) {
               return buildListTile(movements[index], index);
@@ -80,7 +80,7 @@ class ListWidget extends StatelessWidget {
         );
       },
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.2),
+      barrierColor: Colors.black.withOpacity(0.5),
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       transitionDuration: const Duration(milliseconds: 300),
       transitionBuilder: (context, animation1, animation2, widget) {
