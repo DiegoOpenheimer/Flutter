@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+typedef void CallbackSelect(int index, String value);
+
 class ComponentSelect extends StatefulWidget {
 
   String label;
   List<String> options;
   int selected;
-  Function onSelected;
+  CallbackSelect onSelected;
 
   ComponentSelect({
     this.label = '',
@@ -46,6 +48,9 @@ class _ComponentSelectState extends State<ComponentSelect> {
           onTap: () {
             setState(() {
               widget.selected = index;
+              if (widget.onSelected != null) {
+                widget.onSelected(index, option);
+              }
             });
           },
           child: Container(

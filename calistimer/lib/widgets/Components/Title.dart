@@ -27,6 +27,7 @@ class ComponentTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(title, style: TextStyle(fontSize: fontSizeTitle, color: colorTitle, fontFamily: fontFamily)),
           SizedBox(height: spacing,),
