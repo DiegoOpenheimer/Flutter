@@ -4,6 +4,7 @@ import 'package:calistimer/widgets/Emon/EmonRunning/EmonRunningBloc.dart';
 import 'package:flutter/material.dart';
 import 'package:calistimer/widgets/Components/BackgroundProgress.dart';
 import 'package:calistimer/widgets/Components/Timer.dart';
+import 'package:calistimer/widgets/Components/ProgressBar.dart';
 
 class EmonRunningWidget extends StatefulWidget {
 
@@ -110,7 +111,7 @@ class _EmonRunningWidgetState extends State<EmonRunningWidget> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Timer(value: time, fontSize: 96,),
-        LinearProgressIndicator(value: progress, valueColor: AlwaysStoppedAnimation(Colors.white), backgroundColor: Colors.transparent),
+        ProgressBar(value: progress, duration: widget.duration,),
         Timer(value: timeRest, fontSize: 20, appendText: ' restantes',),
       ],
     );

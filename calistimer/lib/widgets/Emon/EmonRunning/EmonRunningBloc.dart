@@ -48,6 +48,9 @@ class EmonRunningBloc {
       if (emonModel.counterSeconds == emonModel.minutes * 60) {
         _observableTimer.cancel();
       }
+      if (emonModel.hasAlert != 0 && emonModel.counterSeconds % int.tryParse(emonModel.alert.replaceAll("s", '')) == 0) {
+       // TODO implement alert
+      }
       _notify();
     });
   }
