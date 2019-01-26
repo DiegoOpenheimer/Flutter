@@ -1,4 +1,4 @@
-import 'package:calistimer/Model/EmonModel.dart';
+import 'package:calistimer/Model/EntityModel.dart';
 import 'package:calistimer/widgets/Components/Title.dart';
 import 'package:calistimer/widgets/Emon/EmonRunning/EmonRunningBloc.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:calistimer/widgets/Components/ProgressBar.dart';
 
 class EmonRunningWidget extends StatefulWidget {
 
-  EmonModel emonModel;
+  EntityModel emonModel;
   Duration duration;
 
   EmonRunningWidget(this.emonModel, {this.duration}) {assert(duration != null);}
@@ -41,8 +41,8 @@ class _EmonRunningWidgetState extends State<EmonRunningWidget> {
       body: StreamBuilder(
         initialData: _emonRunningBloc.getEmonModel(),
         stream: _emonRunningBloc.stream,
-        builder: (BuildContext context, AsyncSnapshot<EmonModel> snapshot) {
-          EmonModel emonModel = snapshot.data;
+        builder: (BuildContext context, AsyncSnapshot<EntityModel> snapshot) {
+          EntityModel emonModel = snapshot.data;
           double time = emonModel.counterOneMinute / 60;
           return BackgroundProgress(
             value: time,
@@ -53,7 +53,7 @@ class _EmonRunningWidgetState extends State<EmonRunningWidget> {
     );
   }
 
-  Widget _body(EmonModel emonModel) {
+  Widget _body(EntityModel emonModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -75,7 +75,7 @@ class _EmonRunningWidgetState extends State<EmonRunningWidget> {
     );
   }
 
-  Column _bottom(EmonModel emonModel) {
+  Column _bottom(EntityModel emonModel) {
     String value = emonModel.counterSecondsCountDown.toString();
     Widget counter = emonModel.hasCountDown != 0 && emonModel.counterSecondsCountDown != 0 ? ComponentTitle(title: value, fontSizeTitle: 120,) : Container();
     return Column(
@@ -103,7 +103,7 @@ class _EmonRunningWidgetState extends State<EmonRunningWidget> {
         );
   }
 
-  Widget _timer(EmonModel emonModel) {
+  Widget _timer(EntityModel emonModel) {
     int time = emonModel.counterSeconds;
     int timeRest = emonModel.minutes * 60 - emonModel.counterSeconds;
     double progress = time / (emonModel.minutes * 60);

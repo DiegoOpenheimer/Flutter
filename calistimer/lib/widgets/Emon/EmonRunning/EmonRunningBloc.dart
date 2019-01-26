@@ -1,28 +1,28 @@
 import 'dart:async';
 
-import 'package:calistimer/Model/EmonModel.dart';
+import 'package:calistimer/Model/EntityModel.dart';
 import 'package:rxdart/rxdart.dart';
 
 class EmonRunningBloc {
 
-  BehaviorSubject<EmonModel> _subject = BehaviorSubject(seedValue: EmonModel());
+  BehaviorSubject<EntityModel> _subject = BehaviorSubject(seedValue: EntityModel());
 
-  Observable<EmonModel> stream;
+  Observable<EntityModel> stream;
 
-  Sink<EmonModel> sink;
+  Sink<EntityModel> sink;
 
   StreamSubscription _observableCountDown;
 
   StreamSubscription _observableTimer;
 
-  EmonRunningBloc(EmonModel emonModel) {
+  EmonRunningBloc(EntityModel emonModel) {
     _subject.value = emonModel;
     stream = _subject.stream;
     sink = _subject.sink;
   }
 
   void initialize({ Duration duration }) {
-    EmonModel emonModel = _subject.value;
+    EntityModel emonModel = _subject.value;
     if (emonModel.hasCountDown != 0) {
       _observableCountDown = Observable.periodic(duration).listen((data) {
         emonModel.counterSecondsCountDown--;
@@ -38,7 +38,7 @@ class EmonRunningBloc {
   }
 
   void _startTimer(Duration duration) {
-    EmonModel emonModel = _subject.value;
+    EntityModel emonModel = _subject.value;
     _observableTimer = Observable.periodic(duration).listen((value) {
       emonModel.counterSeconds++;
       emonModel.counterOneMinute++;
@@ -73,6 +73,6 @@ class EmonRunningBloc {
     }
   }
 
-  EmonModel getEmonModel() => _subject.value;
+  EntityModel getEmonModel() => _subject.value;
 
 }

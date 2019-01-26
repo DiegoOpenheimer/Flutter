@@ -1,5 +1,5 @@
 import 'package:calistimer/widgets/Components/Select.dart';
-import 'package:calistimer/widgets/Emon/EmonBloc.dart';
+import 'package:calistimer/bloc/EntityBloc.dart';
 import 'package:calistimer/widgets/Emon/EmonRunning/EmonRunningWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:calistimer/widgets/Components/Title.dart';
@@ -14,13 +14,13 @@ class EmonWidget extends StatefulWidget {
 class EmonWidgetState extends State<EmonWidget> {
 
   TextEditingController _textEditingController = TextEditingController();
-  EmonBloc _emonBloc;
+  EntityBloc _emonBloc;
 
   @override
   void initState() {
     super.initState();
-    _emonBloc = EmonBloc();
-    _textEditingController.text = _emonBloc.getEmonModel().minutes.toString();
+    _emonBloc = EntityBloc();
+    _textEditingController.text = _emonBloc.getEntityModel().minutes.toString();
   }
 
   @override
@@ -48,11 +48,11 @@ class EmonWidgetState extends State<EmonWidget> {
             SizedBox(height: 5,),
             Icon(Icons.watch_later, color: Colors.white, size: 50,),
             SizedBox(height: 30,),
-            ComponentSelect(label: 'Alertas', options: ['Desligado', '15s', '30s', '45s'], selected: _emonBloc.getEmonModel().hasAlert, onSelected: (int index, String value) {
+            ComponentSelect(label: 'Alertas', options: ['Desligado', '15s', '30s', '45s'], selected: _emonBloc.getEntityModel().hasAlert, onSelected: (int index, String value) {
               _emonBloc.setAlert(index: index, value: value);
             },),
             SizedBox(height: 40,),
-            ComponentSelect(label: 'Contagem regressiva', options: ['Não', 'Sim'], selected: _emonBloc.getEmonModel().hasCountDown, onSelected: (int index, String value) => _emonBloc.setCountDown(index: index),),
+            ComponentSelect(label: 'Contagem regressiva', options: ['Não', 'Sim'], selected: _emonBloc.getEntityModel().hasCountDown, onSelected: (int index, String value) => _emonBloc.setCountDown(index: index),),
             SizedBox(height: 40,),
             _chooseMinutes(),
             Expanded(
@@ -64,7 +64,7 @@ class EmonWidgetState extends State<EmonWidget> {
                   _buildButtonPlay(),
                   Container(width: 120,child: FlatButton(child: Text('TESTAR', style: TextStyle(fontSize: 20),), onPressed: () {
                     Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation1, animation2){
-                      return EmonRunningWidget(_emonBloc.getEmonModel(), duration: const Duration(milliseconds: 100),);
+                      return EmonRunningWidget(_emonBloc.getEntityModel(), duration: const Duration(milliseconds: 100),);
                     },
                       transitionDuration: const Duration(milliseconds: 1),
                     ));
@@ -107,7 +107,7 @@ class EmonWidgetState extends State<EmonWidget> {
       padding: EdgeInsets.all(10),
       onPressed: () {
         Navigator.of(context).push(PageRouteBuilder(pageBuilder: (context, animation1, animation2){
-          return EmonRunningWidget(_emonBloc.getEmonModel(), duration: const Duration(seconds: 1),);
+          return EmonRunningWidget(_emonBloc.getEntityModel(), duration: const Duration(seconds: 1),);
         },
           transitionDuration: const Duration(milliseconds: 1),
         ));

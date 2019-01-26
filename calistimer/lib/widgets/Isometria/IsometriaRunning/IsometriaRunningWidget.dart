@@ -106,11 +106,14 @@ class IsometriaRunningWidgetState extends State<IsometriaRunningWidget> {
   Widget _timer(IsometriaModel isometria) {
     int time = isometria.counterSeconds;
     int timeRest = isometria.seconds - isometria.counterSeconds;
+    int result = isometria.seconds - isometria.counterSeconds;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Timer(value: time, fontSize: 96,),
         isometria.hasGoal != 0 ? Timer(value: timeRest > 0 ? timeRest : 0, fontSize: 20, appendText: ' restantes',) : null,
+        SizedBox(height: 5,),
+         result < 0 && isometria.pause ? Text('$result segundos', style: TextStyle(color: Colors.white, fontSize: 18),) : SizedBox(height: 20,)
       ].where((Widget widget) => widget != null).toList(),
     );
   }

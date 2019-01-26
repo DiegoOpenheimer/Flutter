@@ -7,6 +7,7 @@ class IsometriaModel {
   int counterOneMinute;
   int counterSecondsDown;
   bool pause;
+  int result;
 
   IsometriaModel({
     this.hasGoal = 0,
@@ -16,6 +17,7 @@ class IsometriaModel {
     this.counterOneMinute = 0,
     this.counterSecondsDown = 5,
     this.pause = false,
+    this.result = 0,
   });
 
   void clearTimers() {
