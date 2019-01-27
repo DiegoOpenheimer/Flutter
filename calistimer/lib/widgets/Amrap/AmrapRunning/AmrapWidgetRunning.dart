@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:calistimer/widgets/Components/BackgroundProgress.dart';
 import 'package:calistimer/widgets/Components/Timer.dart';
 import 'package:calistimer/widgets/Components/ProgressBar.dart';
+import 'package:screen/screen.dart';
+
 
 class AmrapRunningWidget extends StatefulWidget {
 
@@ -27,12 +29,14 @@ class _AmrapRunningWidgetState extends State<AmrapRunningWidget> {
     super.initState();
     bloc = AmrapBloc(model: widget.entityModel);
     bloc.initialize(duration: widget.duration != null ? widget.duration : const Duration(seconds: 1));
+    Screen.keepOn(true);
   }
 
   @override
   void dispose() {
     super.dispose();
     bloc.close();
+    Screen.keepOn(false);
   }
 
   @override

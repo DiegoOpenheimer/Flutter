@@ -4,6 +4,8 @@ import 'package:calistimer/widgets/Components/Title.dart';
 import 'package:calistimer/widgets/Isometria/IsometriaRunning/IsometriaRunningBloc.dart';
 import 'package:flutter/material.dart';
 import 'package:calistimer/widgets/Components/Timer.dart';
+import 'package:screen/screen.dart';
+
 
 class IsometriaRunningWidget extends StatefulWidget {
 
@@ -26,12 +28,14 @@ class IsometriaRunningWidgetState extends State<IsometriaRunningWidget> {
     super.initState();
     _isometriaRunningBloc = IsometriaRunningBloc(widget.isometriaModel);
     _isometriaRunningBloc.initialize(duration: widget.duration);
+    Screen.keepOn(true);
   }
 
   @override
   void dispose() {
     super.dispose();
     _isometriaRunningBloc.close();
+    Screen.keepOn(false);
   }
 
   @override

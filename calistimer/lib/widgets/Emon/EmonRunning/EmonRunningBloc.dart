@@ -1,9 +1,13 @@
 import 'dart:async';
 
+import 'package:calistimer/services/Audio.dart';
 import 'package:calistimer/Model/EntityModel.dart';
 import 'package:rxdart/rxdart.dart';
 
+
 class EmonRunningBloc {
+
+  AudioPlayer _audioPlayer = AudioPlayer('alert.wav', prefix: 'sounds/');
 
   BehaviorSubject<EntityModel> _subject = BehaviorSubject(seedValue: EntityModel());
 
@@ -25,6 +29,9 @@ class EmonRunningBloc {
     EntityModel emonModel = _subject.value;
     if (emonModel.hasCountDown != 0) {
       _observableCountDown = Observable.periodic(duration).listen((data) {
+        if (duration.inSeconds == 1) {
+          _audioPlayer.play();
+        }
         emonModel.counterSecondsCountDown--;
         _notify();
         if (emonModel.counterSecondsCountDown == 0) {
@@ -49,13 +56,14 @@ class EmonRunningBloc {
         _observableTimer.cancel();
       }
       if (emonModel.hasAlert != 0 && emonModel.counterSeconds % int.tryParse(emonModel.alert.replaceAll("s", '')) == 0) {
-       // TODO implement alert
+        _audioPlayer.play();
       }
       _notify();
     });
   }
 
   void close() {
+    _audioPlayer.clear();
     _subject.close();
     sink.close();
     if (_observableCountDown != null) {

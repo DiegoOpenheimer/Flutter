@@ -1,9 +1,11 @@
 import 'package:calistimer/Model/EntityModel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:async';
-
+import 'package:calistimer/services/Audio.dart';
 
 class AmrapBloc {
+
+  AudioPlayer _audioPlayer = AudioPlayer('alert.wav', prefix: 'sounds/');
 
   final BehaviorSubject<EntityModel> _subject = BehaviorSubject(seedValue: EntityModel());
 
@@ -26,6 +28,9 @@ class AmrapBloc {
     if (model.hasCountDown != 0) {
       _countDownTimer = Observable.periodic(duration).listen((_) {
         if (!model.pause) {
+          if (duration.inSeconds == 1) {
+            _audioPlayer.play();
+          }
           model.counterSecondsCountDown--;
           _publish();
           if (model.counterSecondsCountDown == 0) {
@@ -82,7 +87,7 @@ class AmrapBloc {
           model.pause = true;
         }
         if (model.hasAlert != 0 && model.counterSeconds % int.tryParse(model.alert.replaceAll("s", '')) == 0) {
-          // TODO implement alert
+          _audioPlayer.play();
         }
         _publish();
       }
@@ -96,6 +101,7 @@ class AmrapBloc {
   }
 
   void close() {
+    _audioPlayer.clear();
     _subject.value.clearTimers();
     sink.close();
     _subject.close();

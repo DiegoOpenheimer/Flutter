@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:calistimer/widgets/Components/BackgroundProgress.dart';
 import 'package:calistimer/widgets/Components/Timer.dart';
 import 'package:calistimer/widgets/Components/ProgressBar.dart';
+import 'package:screen/screen.dart';
+
 
 class EmonRunningWidget extends StatefulWidget {
 
@@ -27,12 +29,14 @@ class _EmonRunningWidgetState extends State<EmonRunningWidget> {
     super.initState();
     _emonRunningBloc = EmonRunningBloc(widget.emonModel);
     _emonRunningBloc.initialize(duration: widget.duration != null ? widget.duration : const Duration(seconds: 1));
+    Screen.keepOn(true);
   }
 
   @override
   void dispose() {
     super.dispose();
     _emonRunningBloc.close();
+    Screen.keepOn(false);
   }
 
   @override
