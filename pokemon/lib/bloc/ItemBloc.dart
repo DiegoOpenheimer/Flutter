@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:pokemon/Models/item.dart';
 import 'package:pokemon/Services/ConnectionNetwork.dart';
 import 'package:pokemon/Services/PokemonService.dart';
+import 'package:rxdart/rxdart.dart';
 
 class ItemBloc {
 
@@ -11,13 +12,16 @@ class ItemBloc {
   PokemonService pokemonService = PokemonService();
   ItemProvider itemProvider = ItemProvider();
   StreamSubscription<ConnectivityResult> subscription;
-  StreamController<ItemProvider> streamController = StreamController();
-  Stream<ItemProvider> streamItem;
+  BehaviorSubject<ItemProvider> _subject = BehaviorSubject();
+  Observable<ItemProvider> streamItem;
   Sink<ItemProvider> sinkItem;
 
+  int offset = 0;
+
   ItemBloc.internal() {
-    streamItem = streamController.stream.asBroadcastStream();
-    sinkItem = streamController.sink;
+    _subject.value = itemProvider;
+    streamItem = _subject.stream;
+    sinkItem = _subject.sink;
     subscription = ConnectionNetwork().listenConnectionEvent.listen(listenEventsToChangeConnection);
   }
   factory ItemBloc() => _instance;
@@ -33,8 +37,21 @@ class ItemBloc {
     }
   }
 
+  void fetchingMoreItems() async {
+    offset+=20;
+    try {
+      sinkItem.add(itemProvider..isFetchingItems = true);
+      List<ItemModel> items = await pokemonService.getItems(offset: offset);
+      itemProvider.items.addAll(items);
+      sinkItem.add(itemProvider..isFetchingItems = false);
+    } on DioError catch(e) {
+      print('ERROR DIO $e');
+      sinkItem.add(itemProvider..isFetchingItems = false);
+    }
+  }
+
   void closeStreams() {
-    streamController.close();
+    _subject.close();
     sinkItem.close();
     subscription.cancel();
   }
@@ -52,6 +69,7 @@ class ItemProvider {
 
   bool _hasError;
   List<ItemModel> _items;
+  bool _isFetchingItems = false;
 
   ItemProvider([bool hasError, List<ItemModel> items]) : this._hasError = hasError ?? false, this._items = items ?? List();
 
@@ -65,6 +83,12 @@ class ItemProvider {
 
   set hasError(bool value) {
     _hasError = value;
+  }
+
+  bool get isFetchingItems => _isFetchingItems;
+
+  set isFetchingItems(bool value) {
+    _isFetchingItems = value;
   }
 
 

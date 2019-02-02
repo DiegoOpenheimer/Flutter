@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 
+import 'package:rxdart/rxdart.dart';
+
 class ConnectionNetwork {
 
   static ConnectionNetwork _instance = ConnectionNetwork.internal();
 
   final Connectivity connectivity = Connectivity();
-  final StreamController<ConnectivityResult> streamController = StreamController();
+  final BehaviorSubject<ConnectivityResult> streamController = BehaviorSubject();
 
-  Stream<ConnectivityResult> listenConnectionEvent;
+  Observable<ConnectivityResult> listenConnectionEvent;
   Sink<ConnectivityResult> emitEventer;
   StreamSubscription<ConnectivityResult> subscription;
 
   ConnectionNetwork.internal() {
-    listenConnectionEvent = streamController.stream.asBroadcastStream();
+    listenConnectionEvent = streamController.stream;
     emitEventer = streamController.sink;
     listenEvent();
   }

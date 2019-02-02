@@ -14,6 +14,7 @@ class _PokemonViewState extends State<PokemonView>
     with AutomaticKeepAliveClientMixin<PokemonView> {
   PokemonBloc pokemonBloc = PokemonBloc();
   ProgressHUD _progressHUD;
+  ScrollController _controller = ScrollController();
 
   @override
   void initState() {
@@ -24,6 +25,18 @@ class _PokemonViewState extends State<PokemonView>
       color: Colors.white,
       loading: false,
     );
+    _controller.addListener(() {
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        pokemonBloc.fetchingMorePokemons();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    pokemonBloc.closeStreamController();
   }
 
   @override
@@ -46,7 +59,23 @@ class _PokemonViewState extends State<PokemonView>
             else if (snapshot.data.isLoading == true)
               return loadingView();
             else
-              return buildSuccess(snapshot.data.pokemons);
+              return Flex(
+                direction: Axis.vertical,
+                children: <Widget>[
+                  Expanded(
+                    child: buildSuccess(snapshot.data.pokemons),
+                  ),
+                  snapshot.data.isFetchingPokemon ? Column(
+                    children: <Widget>[
+                      SizedBox(height: 16,),
+                      Center(child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),),
+                      SizedBox(height: 16,),
+                    ],
+                  ) : null
+                ].where((Widget widget) => widget != null).toList(),
+              );
           } else {
             return loadingView();
           }
@@ -79,8 +108,9 @@ class _PokemonViewState extends State<PokemonView>
   Widget buildSuccess(List<PokemonModel> pokemons) => Scrollbar(
         child: GestureDetector(
           child: GridView.builder(
+            controller: _controller,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+                crossAxisCount: 3,
                 mainAxisSpacing: 10.0,
                 crossAxisSpacing: 10.0),
             itemBuilder: (BuildContext context, int index) {

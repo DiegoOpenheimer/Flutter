@@ -48,8 +48,8 @@ class MainViewState extends State<MainView> with SingleTickerProviderStateMixin 
           child: TabBar(
             controller: _tabController,
             indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Colors.white, width: 2.0),
-                insets: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0)),
+                borderSide: BorderSide(color: Colors.white, width: 2),
+                insets: EdgeInsets.fromLTRB(0, 0, 0, 45)),
             tabs: <Widget>[
               Tab(
                 text: 'Pokemons',

@@ -6,6 +6,7 @@ import 'package:pokemon/Services/ConnectionNetwork.dart';
 import 'package:pokemon/Services/PokemonService.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:rxdart/rxdart.dart';
 
 
 class PokemonBloc {
@@ -14,26 +15,28 @@ class PokemonBloc {
   PokemonService pokemonService = PokemonService();
   StreamSubscription<ConnectivityResult> subscription;
 
-  StreamController<PokemonProvider> listSteamPokemonController = StreamController();
+  BehaviorSubject<PokemonProvider> _subject = BehaviorSubject();
 
-  Stream<PokemonProvider> streamPokemon;
+  Observable<PokemonProvider> streamPokemon;
 
   Sink<PokemonProvider> sinkPokemon;
 
+  int offset = 0;
 
   static PokemonBloc _instance = PokemonBloc.internal();
 
   factory PokemonBloc() => _instance;
 
   PokemonBloc.internal() {
-    streamPokemon = listSteamPokemonController.stream;
-    sinkPokemon = listSteamPokemonController.sink;
+    _subject.value = pokemonProvider;
+    streamPokemon = _subject.stream;
+    sinkPokemon = _subject.sink;
     subscription = ConnectionNetwork().listenConnectionEvent.listen(listenEventsConnection);
   }
 
   void requestPokemonsFromService() async {
     try {
-      pokemonProvider.pokemons = await pokemonService.getPokemons();
+      pokemonProvider.pokemons = await pokemonService.getPokemons(offset: offset);
       pokemonProvider.hasError = false;
       pokemonProvider.isLoading = false;
       pokemonProvider.messageError = '';
@@ -45,8 +48,21 @@ class PokemonBloc {
     }
   }
 
+  void fetchingMorePokemons() async {
+    try {
+      offset += 20;
+      sinkPokemon.add(pokemonProvider..isFetchingPokemon = true);
+      List<PokemonModel> pokemons = await pokemonService.getPokemons(offset: offset);
+      pokemonProvider.pokemons.addAll(pokemons);
+      sinkPokemon.add(pokemonProvider..isFetchingPokemon = false);
+    } on DioError catch(e) {
+      print('ERROR DIO: $e');
+      sinkPokemon.add(pokemonProvider..isFetchingPokemon = false);
+    }
+  }
+
   void closeStreamController() {
-    listSteamPokemonController.close();
+    _subject.close();
     sinkPokemon.close();
     subscription.cancel();
   }
@@ -65,7 +81,7 @@ class PokemonBloc {
       Pokemon pokemon = await pokemonService.getPokemonById(pokemonModel.url.split('/')[6]);
       return pokemon;
     } on DioError catch(error) {
-      print('ERROR BLOCK');
+      print('ERROR DIO $error');
       throw error;
     }
   }
@@ -77,7 +93,7 @@ class PokemonProvider {
   String _messageError;
   bool _hasError;
   bool _isLoading;
-  bool _isFetchingPokemon;
+  bool _isFetchingPokemon = false;
   List<PokemonModel> _pokemons;
 
   PokemonProvider([String messageError, bool hasError, bool isLoading, List<PokemonModel> pokemons]) :

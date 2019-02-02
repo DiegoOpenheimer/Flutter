@@ -8,16 +8,16 @@ class PokemonService {
 
   final Dio dio = Dio(Options(baseUrl: 'https://pokeapi.co/api/v2/'));
 
-  Future<List<PokemonModel>> getPokemons() {
-    return dio.get('pokemon').timeout(const Duration(seconds: 10))
+  Future<List<PokemonModel>> getPokemons({ int offset = 0, int limit = 20 }) {
+    return dio.get('pokemon?offset=$offset&limit=$limit').timeout(const Duration(seconds: 10))
         .then((Response response) {
             List data = response.data['results'];
             return data.map((pokemon) => PokemonModel.fromJson(pokemon)).toList();
         });
   }
 
-  Future<List<ItemModel>> getItems() {
-    return dio.get('item').timeout(const Duration(seconds: 10)).then((Response response) {
+  Future<List<ItemModel>> getItems({ int offset = 0, int limit = 20 }) {
+    return dio.get('item?offset=$offset&limit=$limit').timeout(const Duration(seconds: 10)).then((Response response) {
       List items = response.data['results'];
       return items.map((item) => ItemModel.fromMap(item)).toList();
     });

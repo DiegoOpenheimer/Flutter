@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokemon/Models/item.dart';
 import 'package:pokemon/bloc/ItemBloc.dart';
 import 'package:progress_hud/progress_hud.dart';
-import 'dart:async';
 
 class ItemsView extends StatefulWidget {
   @override
@@ -11,17 +10,32 @@ class ItemsView extends StatefulWidget {
 
 class _ItemsViewState extends State<ItemsView> with AutomaticKeepAliveClientMixin<ItemsView> {
 
-  ItemBloc itemBloc = ItemBloc();
+
+  ItemBloc itemBloc;
   ProgressHUD _progressHUD = ProgressHUD(
     backgroundColor: Colors.black26,
     loading: false,
     color: Colors.white,
   );
 
+  ScrollController _controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
+    itemBloc = ItemBloc();
     itemBloc.requestServiceToGetItems();
+    _controller.addListener(() {
+      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
+        itemBloc.fetchingMoreItems();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+   _controller.dispose();
   }
 
   @override
@@ -45,7 +59,25 @@ class _ItemsViewState extends State<ItemsView> with AutomaticKeepAliveClientMixi
         } else {
           ItemProvider itemProvider = snapshot.data;
           if (itemProvider.hasError) return buildError();
-          else return buildSuccess(itemProvider.items);
+          else return Flex(
+            direction: Axis.vertical,
+            children: <Widget>[
+              Expanded(
+                child: buildSuccess(itemProvider.items),
+              ),
+              snapshot.data.isFetchingItems ? Column(
+                children: <Widget>[
+                  SizedBox(height: 16,),
+                  Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ),
+                  SizedBox(height: 16,),
+                ],
+              ) : null
+            ].where((Widget widget) => widget != null).toList(),
+          );
         }
       },
     );
@@ -75,8 +107,9 @@ class _ItemsViewState extends State<ItemsView> with AutomaticKeepAliveClientMixi
   Widget buildSuccess(List<ItemModel> items) {
     return Scrollbar(
       child: GridView.builder(
+          controller: _controller,
           itemCount: items.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10.0, mainAxisSpacing: 10.0),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 10.0, mainAxisSpacing: 10.0),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               child: Column(
