@@ -69,23 +69,28 @@ class ListWidget extends StatelessWidget {
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
-        return Center(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(15))),
-            width: MediaQuery.of(context).size.width * .7,
-            height: 200.0,
-            child: materialAlert(movement, index),
+        return WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(15))),
+              width: MediaQuery.of(context).size.width * .7,
+              height: 200.0,
+              child: materialAlert(movement, index),
+            ),
           ),
         );
       },
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-      transitionDuration: const Duration(milliseconds: 300),
+      transitionDuration: const Duration(seconds: 1),
       transitionBuilder: (context, animation1, animation2, widget) {
         return SlideTransition(
-          position: Tween(begin: Offset(0, -1), end: Offset(0, 0)).animate(animation1),
+          position: Tween(begin: Offset(0, -1), end: Offset(0, 0)).animate(
+              CurvedAnimation(parent: animation1, curve: Curves.elasticInOut)
+          ),
           child: widget,
         );
       },
