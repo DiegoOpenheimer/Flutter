@@ -39,9 +39,6 @@ class TripsWidgetsState extends State<TripsWidgets> {
   @override
   void dispose() {
     super.dispose();
-    if (_googleMapController != null) {
-      _googleMapController.dispose();
-    }
   }
 
   @override
@@ -58,7 +55,8 @@ class TripsWidgetsState extends State<TripsWidgets> {
       builder: (BuildContext context, AsyncSnapshot<TripsModel> snapshot) {
         return Column(
           children: <Widget>[
-            Expanded(
+            Container(
+              height: MediaQuery.of(context).size.height * .7,
               child: Stack(
                 children: <Widget>[
                   GoogleMap(
@@ -67,6 +65,8 @@ class TripsWidgetsState extends State<TripsWidgets> {
                        _tripsBloc.setGoogleMapController(googleMapController);
                        _tripsBloc.changePositionMap();
                     },
+                  initialCameraPosition:  CameraPosition(
+                  target: LatLng(37.78825, -122.4324), zoom: 1)
                   ),
                   Padding(
                     padding: EdgeInsets.all(16),

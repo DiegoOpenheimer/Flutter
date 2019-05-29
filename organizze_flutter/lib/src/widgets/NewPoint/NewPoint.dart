@@ -129,24 +129,26 @@ class _NewPointState extends State<NewPoint> {
                           () => EagerGestureRecognizer(),
                     ),
                   ].toSet(),
-                  options: GoogleMapOptions(
-                      cameraPosition: CameraPosition(
-                          target: LatLng(37.78825, -122.4324), zoom: 1)),
-                  onMapCreated: (GoogleMapController controller) {
-                    _googleMapController = controller;
-                    _googleMapController.addMarker(MarkerOptions(
-                        position: LatLng(37.78825, -122.4324),
-                        draggable: true,
-                        infoWindowText: InfoWindowText('Pin',
-                            'Mova o marcador para definir um ponto para essa viagem ')));
-                    _googleMapController.onMarkerDragEnd.add((arguments) {
-                      _newPointBloc.setField(
-                          'latitude', arguments['latitude']);
-                      _newPointBloc.setField(
-                          'longitude', arguments['longitude']);
-                    });
-                  //  _googleMapController.addListener(() => FocusScope.of(context).requestFocus(FocusNode()));
-                  }),
+                  initialCameraPosition:  CameraPosition(
+                                    target: LatLng(37.78825, -122.4324), zoom: 1)),
+//                  options: GoogleMapOptions(
+//                      cameraPosition: CameraPosition(
+//                          target: LatLng(37.78825, -122.4324), zoom: 1)),
+//                  onMapCreated: (GoogleMapController controller) {
+//                    _googleMapController = controller;
+//                    _googleMapController.addMarker(MarkerOptions(
+//                        position: LatLng(37.78825, -122.4324),
+//                        draggable: true,
+//                        infoWindowText: InfoWindowText('Pin',
+//                            'Mova o marcador para definir um ponto para essa viagem ')));
+//                    _googleMapController.onMarkerDragEnd.add((arguments) {
+//                      _newPointBloc.setField(
+//                          'latitude', arguments['latitude']);
+//                      _newPointBloc.setField(
+//                          'longitude', arguments['longitude']);
+//                    });
+//                  //  _googleMapController.addListener(() => FocusScope.of(context).requestFocus(FocusNode()));
+//                  }),
             ),
             Positioned(
               left: 10,

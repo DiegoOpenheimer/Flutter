@@ -55,7 +55,7 @@ class _EntityWidgetState extends State<EntityWidget> {
           primaryColor: widget.color,
       ),
       child: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
         child: Scaffold(
           body: _buildBody(),
           floatingActionButton: showFab ? _floatingActionButton() : null,
