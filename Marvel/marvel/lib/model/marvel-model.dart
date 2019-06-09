@@ -84,6 +84,13 @@ class Character {
     "events": events.toMap(),
     "urls": new List<dynamic>.from(urls.map((x) => x.toMap())),
   };
+
+  @override
+  String toString() {
+    return 'Character{id: $id, name: $name, description: $description, modified: $modified, thumbnail: $thumbnail, resourceUri: $resourceUri, comics: $comics, series: $series, stories: $stories, events: $events, urls: $urls}';
+  }
+
+
 }
 
 class Comics {

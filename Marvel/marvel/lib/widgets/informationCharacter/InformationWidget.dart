@@ -20,7 +20,7 @@ class InformationState extends State<InformationWidget> with SingleTickerProvide
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 400));
     _animationBorder = Tween(begin: 0.0, end: 100.0).animate(_animationController);
     _animationController.forward();
 
@@ -39,15 +39,18 @@ class InformationState extends State<InformationWidget> with SingleTickerProvide
     Character character = arguments['character'];
     String image = arguments['image'];
     CupertinoNavigationBar cupertinoNavigationBar = CupertinoNavigationBar(
-      middle: Text(character.name),
+      middle: Text(character.name, overflow: TextOverflow.ellipsis,),
       previousPageTitle: 'BACK',
     );
     _paddingTop = cupertinoNavigationBar.preferredSize.height + MediaQuery.of(context).padding.top;
     return CupertinoPageScaffold(
       navigationBar: cupertinoNavigationBar,
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        child: _body(character, image),
+      child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 8),
+          width: MediaQuery.of(context).size.width,
+          child: _body(character, image),
+        ),
       ),
     );
   }
@@ -55,7 +58,7 @@ class InformationState extends State<InformationWidget> with SingleTickerProvide
   Widget _body(Character character, String image) {
     return Column(
       children: <Widget>[
-        SizedBox(height: _paddingTop,),
+        SizedBox(height: _paddingTop + 16,),
         Hero(
           transitionOnUserGestures: true,
           tag: character.id,
@@ -72,9 +75,33 @@ class InformationState extends State<InformationWidget> with SingleTickerProvide
               );
             }
           ),
-        )
+        ),
+        ..._buildInformation(character)
       ],
     );
+  }
+
+  List<Widget> _buildInformation(Character character) {
+    return <Widget>[
+      SizedBox(height: 16,),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("Description: ", style: TextStyle(fontWeight: FontWeight.bold)),
+          Flexible(child:   Text(character.description == null || character.description.isEmpty ? 'Without description' : character.description, textAlign: TextAlign.justify,)
+            ,)
+        ],
+      ),
+      SizedBox(height: 8,),
+      Divider(),
+      SizedBox(height: 8,),
+      Row(
+        children: <Widget>[
+          Text("Modified: ", style: TextStyle(fontWeight: FontWeight.bold),),
+          Text(character.modified == null || character.modified.isEmpty ? 'Without modified' : character.modified)
+        ],
+      ),
+    ];
   }
 
 }

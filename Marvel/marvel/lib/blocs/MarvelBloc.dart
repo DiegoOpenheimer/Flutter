@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
 import 'package:marvel/model/marvel-model.dart';
+import 'package:marvel/services/ToastChannel.dart';
 import 'package:marvel/services/connectionNetwork.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:bloc_pattern/bloc_pattern.dart';
@@ -49,9 +50,9 @@ class MarvelBloc extends BlocBase {
   }
 
   void fetchMoreCharacters() async {
+    ModelMarvelBloc modelMarvelBloc = _subject.value;
     if (await connectionNetwork.connectivityResult != ConnectivityResult.none) {
       _offset += 20;
-      ModelMarvelBloc modelMarvelBloc = _subject.value;
       try {
         Data data = await this.marvelAPI.getCharacters(limit: _limit, offset: _offset);
         modelMarvelBloc.data.results.addAll(data.results);
@@ -61,7 +62,8 @@ class MarvelBloc extends BlocBase {
         _subject.add(modelMarvelBloc..isFetching = false);
       }
     } else {
-      //TODO show message
+      _subject.add(modelMarvelBloc);
+      ToastChannel.showToast('Without connection, verify network');
     }
   }
 

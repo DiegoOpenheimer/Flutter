@@ -26,7 +26,7 @@ class MarvelListWidget extends StatelessWidget {
       controller: _controller,
       padding: EdgeInsets.only(top: 8),
       shrinkWrap: true,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 0.95),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: .7),
       itemBuilder: (context, index) {
         return _buildItemList(list[index], context);
       },
@@ -38,7 +38,7 @@ class MarvelListWidget extends StatelessWidget {
     String extension = character?.thumbnail?.extension == Extension.GIF ? '.gif' : '.jpg';
     String pathImage = character.thumbnail != null ? '${character.thumbnail.path}${extension}?apikey=$apikey' : '';
     Widget first = pathImage.isNotEmpty ? Container(
-      height: 185,
+      height: 300,
       decoration: BoxDecoration(image: DecorationImage(image: CachedNetworkImageProvider(pathImage), fit: BoxFit.cover)),
     ) : Center(child: Text('Without image'),);
     return GestureDetector(
@@ -47,7 +47,9 @@ class MarvelListWidget extends StatelessWidget {
       },
       child: Column(
         children: <Widget>[
-          Hero(child: first, tag: character.id, transitionOnUserGestures: true,),
+          Flexible(
+            child: Hero(child: first, tag: character.id, transitionOnUserGestures: true,),
+          ),
           Text(character.name, overflow: TextOverflow.ellipsis,),
           SizedBox(height: 8,)
         ],
