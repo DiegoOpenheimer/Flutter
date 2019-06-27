@@ -12,7 +12,7 @@ class HomeWidget extends StatefulWidget {
 
 }
 
-class HomeStateWidget extends State<HomeWidget> {
+class HomeStateWidget extends State<HomeWidget> with AutomaticKeepAliveClientMixin {
 
   ThemeBloc themeBloc;
   MarvelBloc _marvelBloc;
@@ -119,6 +119,9 @@ class HomeStateWidget extends State<HomeWidget> {
       }
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
 
 

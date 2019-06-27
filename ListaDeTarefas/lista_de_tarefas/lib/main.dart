@@ -31,6 +31,7 @@ class MyAppState extends State<MyApp> {
 
   Widget buildItem(BuildContext context, int index) {
     return Dismissible(
+
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       child: CheckboxListTile(
         value: listTask[index]["ok"],

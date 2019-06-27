@@ -23,6 +23,7 @@ class MarvelListWidget extends StatelessWidget {
 
   Widget _buildGridView(BuildContext context) {
     return GridView.builder(
+      cacheExtent: double.infinity,
       controller: _controller,
       padding: EdgeInsets.only(top: 8),
       shrinkWrap: true,
