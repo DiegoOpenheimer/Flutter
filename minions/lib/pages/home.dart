@@ -32,7 +32,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(left: 16, top: 16),
+          padding: const EdgeInsets.all(16),
           child: RichText(
             text: TextSpan(
               children: [
@@ -51,31 +51,25 @@ class _HomeWidgetState extends State<HomeWidget> {
     Character characterKevin =  characters[0];
     Character characterAgnes =  characters[1];
     return PageView(
-      physics: PageScrollPhysics(),
       children: <Widget>[
         CardMinion(
-          onPress: (Character character) {
-            Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 400),
-                pageBuilder: (context, animation1, animation2) {
-                  return MinionDescription(character);
-                }
-            ));
-          },
+          onPress: (Character character) => _goPage(character),
           character: characterKevin,
         ),
         CardMinion(
-          onPress: (Character character) {
-            Navigator.of(context).push(PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 400),
-                pageBuilder: (context, animation1, animation2) {
-                  return MinionDescription(character);
-                }
-            ));
-          },
+          onPress: (Character character) => _goPage(character),
           character: characterAgnes,
         )
       ],
     );
+  }
+
+  void _goPage(Character character) {
+    Navigator.of(context).push(PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (context, animation1, animation2) {
+        return MinionDescription(character);
+      }
+    ));
   }
 }

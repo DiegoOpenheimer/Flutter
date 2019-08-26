@@ -24,6 +24,7 @@ class CardMinion extends StatelessWidget {
           children: <Widget>[
             buildAlign(context),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Hero(
@@ -51,22 +52,22 @@ class CardMinion extends StatelessWidget {
   Align buildAlign(BuildContext context) {
     return Align(
             alignment: Alignment.bottomCenter,
-            child: ClipPath(
+            child: Hero(
+              tag: 'container-${character.name}',
+              child: ClipPath(
                 clipper: CustomPath(),
-                child: Hero(
-                  tag: 'container-${character.name}',
-                  child: Container(
-                    height: MediaQuery.of(context).size.height * .6,
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: character.colors,
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(40))
-                    ),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * .6,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: character.colors,
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft
+                      ),
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(40), bottomRight: Radius.circular(40))
                   ),
                 ),
+              ),
             ),
           );
   }
@@ -75,12 +76,12 @@ class CardMinion extends StatelessWidget {
 class CustomPath extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    Path path =  Path();
+    Path path = Path();
     double curveDistance = 40;
     path.moveTo(0, size.height * .4);
-    path.quadraticBezierTo(0, size.height * .4 - curveDistance, curveDistance, size.height * .4 - curveDistance - 15);
-    path.lineTo(size.width - curveDistance, 0);
-    path.lineTo(size.width, 0);
+    path.quadraticBezierTo(0, size.height * .4 - curveDistance, curveDistance, size.height * .4 - curveDistance - 20);
+    path.lineTo(size.width - curveDistance, 20);
+    path.quadraticBezierTo(size.width, 0, size.width, curveDistance);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();

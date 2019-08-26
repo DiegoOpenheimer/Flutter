@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Minions',
       color: Colors.white,
       theme: ThemeData(
+        accentColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(color: Colors.white, elevation: 0, iconTheme: IconThemeData(color: Colors.black))
       ),
