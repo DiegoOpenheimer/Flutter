@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoApp(
       theme: CupertinoThemeData(
-        primaryColor:  Colors.purple,
+        primaryColor:  Color(0xff6f00f8),
       ),
-      color: Colors.purple,
+      color: Color(0xff6f00f8),
       title: 'Todo',
       routes: <String, WidgetBuilder>{
         '/': (context) => HomeWidget(),

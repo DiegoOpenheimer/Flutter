@@ -6,6 +6,7 @@ class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoTabScaffold(
+      resizeToAvoidBottomInset: false,
       tabBar: CupertinoTabBar(
         items: _buildItems(),
       ),
