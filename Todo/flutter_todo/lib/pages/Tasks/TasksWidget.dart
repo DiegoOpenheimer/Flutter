@@ -5,6 +5,7 @@ import 'package:flutter_todo/components/Alert.dart';
 import 'package:flutter_todo/components/CheckBoxiOS.dart';
 import 'package:flutter_todo/components/CustomNavigationBar.dart';
 import 'package:flutter_todo/model/Task.dart';
+import 'package:flutter_todo/pages/AddTodo/AddTodoWidget.dart';
 import 'package:flutter_todo/services/FlutterToast.dart';
 
 class TasksWidget extends StatefulWidget {
@@ -17,7 +18,8 @@ class _TasksWidgetState extends State<TasksWidget> {
   
   final TaskBloc _taskBloc = TaskBloc();
   final ScrollController _scrollController = ScrollController();
-  
+
+
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,6 @@ class _TasksWidgetState extends State<TasksWidget> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
-      navigationBar: CustomNavigationBar(title: 'Todo List',),
       child: _buildBody(),
     );
   }
@@ -36,24 +37,30 @@ class _TasksWidgetState extends State<TasksWidget> {
   Widget _buildBody() {
     return Stack(
       children: <Widget>[
-        Column(
-          children: <Widget>[
-            _buildSegment(),
-            Expanded(child: _buildList()),
+        CustomScrollView(
+          controller: _scrollController,
+          slivers: <Widget>[
+            CupertinoSliverNavigationBar(
+              backgroundColor: const Color(0xff6f00f8),
+              largeTitle: Text('Todo List', style: TextStyle(color: Colors.white),),
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: <Widget>[
+                  _buildSegment(),
+                  _buildList(),
+                ],
+              ),
+            )
           ],
         ),
         Align(
           alignment: Alignment(.9, .75),
           child: FloatingActionButton(
-            onPressed: () async {
-              await Navigator.of(context).pushNamed('/add-todo');
-              await Future.delayed(Duration(milliseconds: 50));
-              _scrollController.animateTo(
-                _scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeOut
-              );
-            },
+            onPressed: () => Navigator.of(context).push(CupertinoPageRoute(
+                builder: (context) => AddTodoWidget(),
+                title: 'Todo List'
+            )),
             child: Icon(CupertinoIcons.add),
             backgroundColor: Color(0xff00dec4),
           ),
@@ -99,7 +106,9 @@ class _TasksWidgetState extends State<TasksWidget> {
             children: <Widget>[
               _taskBloc.currentSegment == 0 || _taskBloc.tasks.isEmpty ? CupertinoButton(
                 child: Icon(CupertinoIcons.add_circled, color: CupertinoColors.activeBlue, size: 28,),
-                onPressed: () => Navigator.pushNamed(context, '/add-todo'),
+                onPressed: () => Navigator.push(context, CupertinoPageRoute(
+                  builder: (context) => AddTodoWidget(),
+                )),
               ) : Container(),
               Text('No task registered', style: TextStyle(fontSize: 20),),
               SizedBox(height: 110,)
@@ -111,6 +120,7 @@ class _TasksWidgetState extends State<TasksWidget> {
           separatorBuilder: (c, i) => Divider(color: CupertinoColors.inactiveGray, height: 1,),
           itemCount: tasks.length,
           itemBuilder: (context, index) => _buildItem(tasks[index]),
+          shrinkWrap: true,
         );
       },
     );

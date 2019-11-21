@@ -21,8 +21,8 @@ class HomeWidget extends StatelessWidget {
   List<BottomNavigationBarItem> _buildItems() {
     return [
       BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.bookmark_solid),
-        title: Text('Tasks')
+          icon: Icon(CupertinoIcons.bookmark_solid),
+          title: Text('Tasks')
       ),
       BottomNavigationBarItem(
           icon: Icon(CupertinoIcons.info),

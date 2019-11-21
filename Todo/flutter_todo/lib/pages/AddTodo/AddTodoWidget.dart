@@ -17,7 +17,7 @@ class AddTodoWidget extends StatelessWidget {
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: CupertinoPageScaffold(
         child: _buildBody(context),
-        navigationBar: CustomNavigationBar(title: 'Add Todo',),
+        navigationBar: CustomNavigationBar(title: 'Add Todo', previousPageTitle: 'Todo List',),
       ),
     );
   }

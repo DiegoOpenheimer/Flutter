@@ -22,10 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       color: Color(0xff6f00f8),
       title: 'Todo',
-      routes: <String, WidgetBuilder>{
-        '/': (context) => HomeWidget(),
-        '/add-todo': (context) => AddTodoWidget()
-      },
+      home: HomeWidget(),
     );
   }
 
