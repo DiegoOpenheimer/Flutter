@@ -35,7 +35,7 @@ class Configuration {
 
   Future<bool> get automatic async {
     SharedPreferences prefs = await preferences;
-    return prefs.getBool(ValueConfiguration.automatic);
+    return prefs.getBool(ValueConfiguration.automatic) ?? false;
   }
 
   Future<void> setAutomatic(bool value) async {
@@ -55,7 +55,7 @@ class Configuration {
 
   Future<int> get segment async {
     SharedPreferences prefs = await preferences;
-    return prefs.getInt(ValueConfiguration.segment);
+    return prefs.getInt(ValueConfiguration.segment) ?? 0;
   }
 
   Future<void> setSegment(int value) async {

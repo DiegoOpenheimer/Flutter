@@ -52,12 +52,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
         SizedBox(height: 16,),
         _buildSegment(),
         Spacer(),
-        Text(
-          'Obs: Para mudar de pensamento basta tocar em qualquer lugar na tela "Pensamentos"',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Constants.color),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'Obs: Para mudar de pensamento basta tocar em qualquer lugar na tela "Pensamentos"',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Constants.color),
+          ),
         ),
-        SizedBox(height: 8,)
       ],
     );
   }

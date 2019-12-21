@@ -64,7 +64,7 @@ class _MindWidgetState extends State<MindWidget> {
             children: <Widget>[
               Image.asset(quote.image, fit: BoxFit.cover,),
               _effectBlur(),
-              Positioned.fill(child: TransitionQuote(quote, fontColor: _bloc.valueSegment != 0 ? Colors.white : null,))
+              Positioned.fill(child: SafeArea(child: TransitionQuote(quote, fontColor: _bloc.valueSegment != 0 ? Colors.white : null,)))
             ],
           );
         }
