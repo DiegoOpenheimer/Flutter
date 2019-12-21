@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark
   ));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
