@@ -82,8 +82,8 @@ class _MindWidgetState extends State<MindWidget> {
          ),
          child: StreamBuilder<int>(
            stream: _bloc.listenerSegment,
-           builder: (context, snapshot) {
-             int value = snapshot.data ?? 0;
+           builder: (context, _) {
+             int value = _bloc.valueSegment ?? 0;
              Color color = value == 0 ?
               Colors.white.withOpacity(.5) :
               Constants.color.withOpacity(.5);
