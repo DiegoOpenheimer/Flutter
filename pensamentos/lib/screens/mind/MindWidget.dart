@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:pensamentos/model/Quote.dart';
+import 'package:pensamentos/screens/home/HomeBloc.dart';
 import 'package:pensamentos/screens/mind/MindBloc.dart';
+import 'package:pensamentos/shared/constants.dart';
 
 import 'components/TransitionQuote.dart';
 
@@ -18,6 +19,9 @@ class _MindWidgetState extends State<MindWidget> {
 
 
   final MindBloc _bloc = MindBloc();
+  final HomeBloc _homeBloc = HomeBloc();
+  StreamSubscription _subscriptionTabs;
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +37,20 @@ class _MindWidgetState extends State<MindWidget> {
   void initState() {
     super.initState();
     _bloc.executeQuote();
+    _subscriptionTabs = _homeBloc.listenerTabs.listen((value) {
+      if (value == 0) {
+        _bloc.executeQuote();
+      } else {
+        _bloc.stopTimer();
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
     _bloc.dispose();
+    _subscriptionTabs?.cancel();
   }
 
   Widget _build() {
@@ -52,7 +64,7 @@ class _MindWidgetState extends State<MindWidget> {
             children: <Widget>[
               Image.asset(quote.image, fit: BoxFit.cover,),
               _effectBlur(),
-              Positioned.fill(child: TransitionQuote(quote))
+              Positioned.fill(child: TransitionQuote(quote, fontColor: _bloc.valueSegment != 0 ? Colors.white : null,))
             ],
           );
         }
@@ -68,8 +80,17 @@ class _MindWidgetState extends State<MindWidget> {
            sigmaX: 20,
            sigmaY: 20
          ),
-         child: Container(
-           color: Colors.white.withOpacity(0.5),
+         child: StreamBuilder<int>(
+           stream: _bloc.listenerSegment,
+           builder: (context, snapshot) {
+             int value = snapshot.data ?? 0;
+             Color color = value == 0 ?
+              Colors.white.withOpacity(.5) :
+              Constants.color.withOpacity(.5);
+             return Container(
+               color: color,
+             );
+           }
          ),
        ),
      );

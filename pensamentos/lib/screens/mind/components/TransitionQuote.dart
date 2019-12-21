@@ -7,8 +7,9 @@ import 'package:pensamentos/model/Quote.dart';
 class TransitionQuote extends StatefulWidget {
 
   final Quote quote;
+  final Color fontColor;
 
-  TransitionQuote(this.quote);
+  TransitionQuote(this.quote, { this.fontColor });
 
   @override
   _TransitionQuoteState createState() => _TransitionQuoteState();
@@ -24,7 +25,7 @@ class _TransitionQuoteState extends State<TransitionQuote> with SingleTickerProv
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000));
     _animationOpacity = Tween(begin: 0.0, end: 1.0).animate(_controller);
     _animationTranslate = Tween(begin: 100.0, end: 0.0).animate(_controller);
     super.initState();
@@ -38,13 +39,8 @@ class _TransitionQuoteState extends State<TransitionQuote> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    if (!_controller.isAnimating) {
-      _controller.forward();
-    }
-    if (_controller.isCompleted) {
-      _controller.reset();
-      _controller.forward();
-    }
+    _controller.reset();
+    _controller.forward();
     return _buildInformation(widget.quote);
   }
 
@@ -78,7 +74,7 @@ class _TransitionQuoteState extends State<TransitionQuote> with SingleTickerProv
                     child: AutoSizeText(
                       quote.quote,
                       maxLines: 5,
-                      style: GoogleFonts.dancingScript(fontSize: 30),textAlign: TextAlign.center, textScaleFactor: 1,),
+                      style: GoogleFonts.dancingScript(fontSize: 30).copyWith(color: widget.fontColor),textAlign: TextAlign.center, textScaleFactor: 1,),
                   ),
                   Text(quote.author, style: GoogleFonts.dancingScript(fontSize: 40, fontWeight: FontWeight.bold))
                 ],
