@@ -32,7 +32,7 @@ class MindBloc {
     valueSegment = await _configuration.segment;
     _controllerSegment.add(valueSegment);
     if (await _configuration.automatic) {
-      _timer = Stream.periodic(Duration(seconds: await _configuration.timer)).listen((_) async {
+      _timer = Stream.periodic(Duration(seconds: (await _configuration.timer).toInt())).listen((_) async {
          Quote quote = await _quoteManager.random();
          _controller.add(quote);
       });

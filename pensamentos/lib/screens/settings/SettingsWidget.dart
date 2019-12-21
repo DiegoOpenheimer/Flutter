@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pensamentos/screens/settings/SettingsBloc.dart';
+import 'package:pensamentos/services/Configuration.dart';
 import 'package:pensamentos/shared/constants.dart';
 
 class SettingsWidget extends StatefulWidget {
@@ -80,31 +81,31 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   }
 
   Widget _streamBuilderSlider() {
-    return StreamBuilder<int>(
+    return StreamBuilder<double>(
       stream: _settingsBloc.listenerSlider,
       builder: (context, snapshot) {
-        int value = snapshot.data ?? 8;
+        double value = snapshot.data ?? ValueConfiguration.defaulTimer;
         return _slider(value);
       }
     );
   }
 
-  Padding _slider(int value) {
+  Padding _slider(double value) {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: <Widget>[
-            Text('Mudar após $value segundos'),
+            Text('Mudar após ${value.toInt().toString()} segundos'),
             Row(
               children: <Widget>[
-                Text(value.toString()),
+                Text(value?.toInt()?.toString()),
                 Expanded(
                   child: CupertinoSlider(
                     min: 3,
                     max: 30,
-                    onChangeEnd: (value) =>  _settingsBloc.changeSlider(value.toInt()),
-                    value: value.toDouble(),
-                    onChanged: (double value) => _settingsBloc.changeSlider(value.toInt(), updateSettings: false),
+                    onChangeEnd: (value) =>  _settingsBloc.changeSlider(value),
+                    value: value,
+                    onChanged: (double value) => _settingsBloc.changeSlider(value, updateSettings: false),
                   ),
                 ),
                 Text('30')

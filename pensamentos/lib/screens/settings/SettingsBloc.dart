@@ -11,8 +11,8 @@ class SettingsBloc {
   StreamController<bool> _controllerSwitch = StreamController();
   Stream<bool> get listenerSwitch => _controllerSwitch.stream;
 
-  StreamController<int> _controllerSlider = StreamController();
-  Stream<int> get listenerSlider => _controllerSlider.stream;
+  StreamController<double> _controllerSlider = StreamController();
+  Stream<double> get listenerSlider => _controllerSlider.stream;
 
   StreamController<int> _controllerSegment = StreamController();
   Stream<int> get listenerSegment => _controllerSegment.stream;
@@ -29,7 +29,7 @@ class SettingsBloc {
     _configuration.setAutomatic(value);
   }
 
-  void changeSlider(int value, { bool updateSettings = true }) {
+  void changeSlider(double value, { bool updateSettings = true }) {
     _controllerSlider.add(value);
     if (updateSettings) {
       _configuration.setTimer(value);

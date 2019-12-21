@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pensamentos/model/Quote.dart';
 import 'package:pensamentos/screens/home/HomeBloc.dart';
 import 'package:pensamentos/screens/mind/MindBloc.dart';
+import 'package:pensamentos/services/Configuration.dart';
 import 'package:pensamentos/shared/constants.dart';
 
 import 'components/TransitionQuote.dart';
@@ -64,12 +65,24 @@ class _MindWidgetState extends State<MindWidget> {
             children: <Widget>[
               Image.asset(quote.image, fit: BoxFit.cover,),
               _effectBlur(),
-              Positioned.fill(child: SafeArea(child: TransitionQuote(quote, fontColor: _bloc.valueSegment != 0 ? Colors.white : null,)))
+              Positioned.fill(child: SafeArea(child: _transitionInformation(quote)))
             ],
           );
         }
         return Container();
       }
+    );
+  }
+
+  Widget _transitionInformation(Quote quote) {
+    return StreamBuilder(
+      stream: _bloc.listenerSegment,
+      builder: (context, snapshot) {
+        return TransitionQuote(
+          quote,
+          fontColor: _bloc.valueSegment != ValueConfiguration.defaultSegment ? Colors.white : null,
+        );
+      },
     );
   }
 
@@ -83,8 +96,8 @@ class _MindWidgetState extends State<MindWidget> {
          child: StreamBuilder<int>(
            stream: _bloc.listenerSegment,
            builder: (context, _) {
-             int value = _bloc.valueSegment ?? 0;
-             Color color = value == 0 ?
+             int value = _bloc.valueSegment ?? ValueConfiguration.defaultSegment;
+             Color color = value == ValueConfiguration.defaultSegment ?
               Colors.white.withOpacity(.5) :
               Constants.color.withOpacity(.5);
              return Container(

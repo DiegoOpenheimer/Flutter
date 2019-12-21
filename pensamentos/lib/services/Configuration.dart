@@ -5,8 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class ValueConfiguration {
 
   static const String automatic = 'automatic';
+  static const bool defaultAutomatic = false;
+
   static const String timer = 'timer';
+  static const double defaulTimer = 8.0;
+
   static const String segment = 'segment';
+  static const int defaultSegment = 0;
 
 }
 
@@ -35,7 +40,7 @@ class Configuration {
 
   Future<bool> get automatic async {
     SharedPreferences prefs = await preferences;
-    return prefs.getBool(ValueConfiguration.automatic) ?? false;
+    return prefs.getBool(ValueConfiguration.automatic) ?? ValueConfiguration.defaultAutomatic;
   }
 
   Future<void> setAutomatic(bool value) async {
@@ -43,19 +48,19 @@ class Configuration {
     prefs.setBool(ValueConfiguration.automatic, value);
   }
 
-  Future<int> get timer async {
+  Future<double> get timer async {
     SharedPreferences prefs = await preferences;
-    return prefs.getInt(ValueConfiguration.timer) ?? 8;
+    return prefs.getDouble(ValueConfiguration.timer) ?? ValueConfiguration.defaulTimer;
   }
 
-  Future<void> setTimer(int value) async {
+  Future<void> setTimer(double value) async {
     SharedPreferences prefs = await preferences;
-    prefs.setInt(ValueConfiguration.timer, value);
+    prefs.setDouble(ValueConfiguration.timer, value);
   }
 
   Future<int> get segment async {
     SharedPreferences prefs = await preferences;
-    return prefs.getInt(ValueConfiguration.segment) ?? 0;
+    return prefs.getInt(ValueConfiguration.segment) ?? ValueConfiguration.defaultSegment;
   }
 
   Future<void> setSegment(int value) async {
