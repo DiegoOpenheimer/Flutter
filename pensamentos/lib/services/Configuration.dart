@@ -8,7 +8,7 @@ abstract class ValueConfiguration {
   static const bool defaultAutomatic = false;
 
   static const String timer = 'timer';
-  static const double defaulTimer = 8.0;
+  static const double defaultTimer = 8.0;
 
   static const String segment = 'segment';
   static const int defaultSegment = 0;
@@ -50,7 +50,7 @@ class Configuration {
 
   Future<double> get timer async {
     SharedPreferences prefs = await preferences;
-    return prefs.getDouble(ValueConfiguration.timer) ?? ValueConfiguration.defaulTimer;
+    return prefs.getDouble(ValueConfiguration.timer) ?? ValueConfiguration.defaultTimer;
   }
 
   Future<void> setTimer(double value) async {

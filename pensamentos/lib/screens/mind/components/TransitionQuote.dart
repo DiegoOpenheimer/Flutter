@@ -56,7 +56,7 @@ class _TransitionQuoteState extends State<TransitionQuote> with SingleTickerProv
                 aspectRatio: 750/666,
                 child: Image.asset(quote.image, fit: BoxFit.contain,),
               ),
-              _message(quote)
+              Expanded(child: _message(quote))
             ],
           ),
         );
@@ -69,12 +69,13 @@ class _TransitionQuoteState extends State<TransitionQuote> with SingleTickerProv
               offset: Offset(0.0, _animationTranslate.value),
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: AutoSizeText(
-                      quote.quote,
-                      maxLines: 5,
-                      style: GoogleFonts.dancingScript(fontSize: 30).copyWith(color: widget.fontColor),textAlign: TextAlign.center, textScaleFactor: 1,),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: AutoSizeText(
+                        quote.quote,
+                        style: GoogleFonts.dancingScript(fontSize: 30).copyWith(color: widget.fontColor),textAlign: TextAlign.center, textScaleFactor: 1,),
+                    ),
                   ),
                   Text(quote.author, style: GoogleFonts.dancingScript(fontSize: 40, fontWeight: FontWeight.bold))
                 ],

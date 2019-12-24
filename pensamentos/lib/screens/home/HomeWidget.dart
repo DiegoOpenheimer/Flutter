@@ -4,15 +4,32 @@ import 'package:pensamentos/screens/mind/MindWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:pensamentos/screens/settings/SettingsWidget.dart';
 
-class HomeWidget extends StatelessWidget {
+class HomeWidget extends StatefulWidget {
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> with WidgetsBindingObserver {
 
   final HomeBloc _homeBloc = HomeBloc();
+
   final CupertinoTabController _controller = CupertinoTabController();
 
-  HomeWidget() {
+
+  @override
+  void initState() {
+    super.initState();
     _controller.addListener(() {
       _homeBloc.sink.add(_controller.index);
     });
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _controller.dispose();
   }
 
   @override
@@ -28,7 +45,7 @@ class HomeWidget extends StatelessWidget {
       ),
     );
   }
-  
+
   List<BottomNavigationBarItem> _buildCupertinoTabs() {
     return [
       BottomNavigationBarItem(
@@ -41,4 +58,11 @@ class HomeWidget extends StatelessWidget {
       )
     ];
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _homeBloc.sinkStateApp.add(state);
+  }
+
+
 }

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pensamentos/screens/home/HomeBloc.dart';
 import 'package:pensamentos/screens/settings/SettingsBloc.dart';
 import 'package:pensamentos/services/Configuration.dart';
 import 'package:pensamentos/shared/constants.dart';
@@ -13,11 +16,18 @@ class SettingsWidget extends StatefulWidget {
 class _SettingsWidgetState extends State<SettingsWidget> {
 
   final SettingsBloc _settingsBloc = SettingsBloc();
+  final HomeBloc _homeBloc = HomeBloc();
+  StreamSubscription _subscription;
 
   @override
   void initState() {
     super.initState();
     _settingsBloc.initialize();
+    _subscription = _homeBloc.listenerStateApp.listen((state) {
+      if (state == AppLifecycleState.resumed) {
+        _settingsBloc.initialize();
+      }
+    });
   }
 
 
@@ -25,6 +35,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   void dispose() {
     super.dispose();
     _settingsBloc.dispose();
+    _subscription?.cancel();
   }
 
   @override
@@ -84,7 +95,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     return StreamBuilder<double>(
       stream: _settingsBloc.listenerSlider,
       builder: (context, snapshot) {
-        double value = snapshot.data ?? ValueConfiguration.defaulTimer;
+        double value = snapshot.data ?? ValueConfiguration.defaultTimer;
         return _slider(value);
       }
     );

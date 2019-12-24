@@ -22,7 +22,7 @@ class _MindWidgetState extends State<MindWidget> {
   final MindBloc _bloc = MindBloc();
   final HomeBloc _homeBloc = HomeBloc();
   StreamSubscription _subscriptionTabs;
-
+  StreamSubscription _subscriptionStateApp;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +45,11 @@ class _MindWidgetState extends State<MindWidget> {
         _bloc.stopTimer();
       }
     });
+    _subscriptionStateApp = _homeBloc.listenerStateApp.listen((state) {
+      if (state == AppLifecycleState.resumed) {
+        _bloc.executeQuote();
+      }
+    });
   }
 
   @override
@@ -52,6 +57,7 @@ class _MindWidgetState extends State<MindWidget> {
     super.dispose();
     _bloc.dispose();
     _subscriptionTabs?.cancel();
+    _subscriptionStateApp?.cancel();
   }
 
   Widget _build() {

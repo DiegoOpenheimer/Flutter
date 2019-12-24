@@ -1,20 +1,20 @@
 
 
 import 'dart:async';
-
 import 'package:pensamentos/services/Configuration.dart';
+import 'package:rxdart/rxdart.dart';
 
 class SettingsBloc {
 
   final Configuration _configuration = Configuration();
 
-  StreamController<bool> _controllerSwitch = StreamController();
+  PublishSubject<bool> _controllerSwitch = PublishSubject();
   Stream<bool> get listenerSwitch => _controllerSwitch.stream;
 
-  StreamController<double> _controllerSlider = StreamController();
+  PublishSubject<double> _controllerSlider = PublishSubject();
   Stream<double> get listenerSlider => _controllerSlider.stream;
 
-  StreamController<int> _controllerSegment = StreamController();
+  PublishSubject<int> _controllerSegment = PublishSubject();
   Stream<int> get listenerSegment => _controllerSegment.stream;
 
 
