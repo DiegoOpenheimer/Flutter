@@ -23,8 +23,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
   void initState() {
     super.initState();
     _settingsBloc.initialize();
-    _subscription = _homeBloc.listenerStateApp.listen((state) {
+    _subscription = _homeBloc.listenerStateApp.listen((state) async {
       if (state == AppLifecycleState.resumed) {
+        await _settingsBloc.reload().catchError((_) => null);
         _settingsBloc.initialize();
       }
     });
@@ -109,7 +110,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             Text('Mudar após ${value.toInt().toString()} segundos'),
             Row(
               children: <Widget>[
-                Text(value?.toInt()?.toString()),
+                Text('3'),
                 Expanded(
                   child: CupertinoSlider(
                     min: 3,

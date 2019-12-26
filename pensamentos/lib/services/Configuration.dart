@@ -38,6 +38,10 @@ class Configuration {
     return _preferences;
   }
 
+  Future reload() async {
+    return (await preferences).reload();
+  }
+
   Future<bool> get automatic async {
     SharedPreferences prefs = await preferences;
     return prefs.getBool(ValueConfiguration.automatic) ?? ValueConfiguration.defaultAutomatic;

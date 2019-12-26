@@ -27,8 +27,12 @@ class MindBloc {
     init();
   }
 
+  Future reload() {
+    return _configuration.reload();
+  }
+
   Future init() async {
-    _timer?.cancel();
+   await _timer?.cancel();
     valueSegment = await _configuration.segment;
     _controllerSegment.add(valueSegment);
     if (await _configuration.automatic) {
