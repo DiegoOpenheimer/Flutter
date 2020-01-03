@@ -77,7 +77,7 @@ class _TransitionQuoteState extends State<TransitionQuote> with SingleTickerProv
                         style: GoogleFonts.dancingScript(fontSize: 30).copyWith(color: widget.fontColor),textAlign: TextAlign.center, textScaleFactor: 1,),
                     ),
                   ),
-                  Text(quote.author, style: GoogleFonts.dancingScript(fontSize: 40, fontWeight: FontWeight.bold))
+                  Text(quote.author, style: GoogleFonts.dancingScript(fontSize: 40, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)
                 ],
               ),
             );

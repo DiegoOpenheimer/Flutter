@@ -45,8 +45,9 @@ class _MindWidgetState extends State<MindWidget> {
         _bloc.stopTimer();
       }
     });
-    _subscriptionStateApp = _homeBloc.listenerStateApp.listen((state) {
+    _subscriptionStateApp = _homeBloc.listenerStateApp.listen((state) async {
       if (state == AppLifecycleState.resumed) {
+        await _bloc.reload().catchError((e) => null);
         _bloc.executeQuote();
       }
     });

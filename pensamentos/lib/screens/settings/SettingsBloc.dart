@@ -24,6 +24,10 @@ class SettingsBloc {
     _controllerSegment.add(await _configuration.segment);
   }
 
+  Future reload() {
+    return _configuration.reload();
+  }
+
   void changeSwitch(bool value) {
     _controllerSwitch.add(value);
     _configuration.setAutomatic(value);
