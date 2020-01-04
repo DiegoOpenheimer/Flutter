@@ -1,8 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:rxdart/rxdart.dart';
 
-class GameBloc {
+class GameController {
 
   BehaviorSubject<String> controllerConsole = BehaviorSubject();
+
+  BehaviorSubject<DateTime> controllerReleaseDate = BehaviorSubject();
+
+  BehaviorSubject<Uint8List> controllerImage = BehaviorSubject();
 
   List<String> consoles = ['xbox', 'nintendo', 'playstation', 'mega drive'];
 
@@ -16,6 +22,8 @@ class GameBloc {
 
   void dispose() {
     controllerConsole.close();
+    controllerReleaseDate.close();
+    controllerImage.close();
   }
 
 }

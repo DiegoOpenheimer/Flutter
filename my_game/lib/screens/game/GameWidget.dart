@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:my_game/components/Alert.dart';
 import 'package:my_game/components/CustomAppBar.dart';
-import 'package:my_game/screens/game/GameBloc.dart';
+import 'package:my_game/screens/game/GameController.dart';
 import 'package:my_game/shared/constants.dart';
 import 'package:my_game/shared/utils.dart';
 
@@ -12,7 +16,8 @@ class GameWidget extends StatefulWidget {
 class _GameWidgetState extends State<GameWidget> {
 
   final _formKey = GlobalKey<FormState>();
-  final _gameBloc = GameBloc();
+  final _textFieldReleaseDate = TextEditingController();
+  final _gameController = GameController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class _GameWidgetState extends State<GameWidget> {
   @override
   void dispose() {
     super.dispose();
-    _gameBloc.dispose();
+    _gameController.dispose();
   }
 
   Widget _body() {
@@ -40,15 +45,18 @@ class _GameWidgetState extends State<GameWidget> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            _textFormField(label: "Nome do jogo", validator: _gameBloc.validateName),
+            _textFormField(label: "Nome do jogo", validator: _gameController.validateName),
             SizedBox(height: 8,),
             _dropdownButton(),
             SizedBox(height: 8,),
             _buildDatePicker(),
             SizedBox(height: 8,),
             Expanded(
-              child: Container(
-                color: Colors.red,
+              child: StreamBuilder<Uint8List>(
+                stream: _gameController.controllerImage.stream,
+                builder: (context, snapshot) {
+                  return _buildContainerImage();
+                }
               ),
             ),
             Container(
@@ -64,9 +72,34 @@ class _GameWidgetState extends State<GameWidget> {
     );
   }
 
+  Widget _buildContainerImage() {
+    var image =  _gameController.controllerImage.value;
+    var widget = image != null ? Image.memory(image, fit: BoxFit.cover,) : Container();
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(child: widget),
+        Center(
+          child: FlatButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+            onPressed: () {
+              Alert.showActionSheet(context, onComplete: (imageSource) async {
+                if (imageSource == null) return;
+                var image = await ImagePicker.pickImage(source: imageSource);
+                if (image != null) {
+                 _gameController.controllerImage.add(image.readAsBytesSync());
+                }
+              });
+            },
+            child: Text('Toque para adicionar uma imagem de capa', style: TextStyle(color: CustomColor.main),),
+          ),
+        )
+      ],
+    );
+  }
+
   Widget _dropdownButton() {
     return StreamBuilder<String>(
-      stream: _gameBloc.controllerConsole.stream,
+      stream: _gameController.controllerConsole.stream,
       builder: (context, snapshot) {
         return Container(
           decoration: BoxDecoration(
@@ -81,8 +114,8 @@ class _GameWidgetState extends State<GameWidget> {
             underline: SizedBox(),
             isExpanded: true,
             value: snapshot.data,
-            onChanged: _gameBloc.controllerConsole.add,
-            items: _gameBloc.consoles
+            onChanged: _gameController.controllerConsole.add,
+            items: _gameController.consoles
             .map((value) {
               return DropdownMenuItem(
                 value: value,
@@ -96,14 +129,18 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   Widget _buildDatePicker() {
-    return StreamBuilder<String>(
-      stream: _gameBloc.controllerConsole.stream,
+    return StreamBuilder<DateTime>(
+      stream: _gameController.controllerReleaseDate.stream,
       builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          _textFieldReleaseDate.text = Utils.formatterDate(snapshot.data);
+        }
         return Material(
           child: InkWell(
-            onTap: showPicker,
+            onTap: () => showPicker(_gameController.controllerReleaseDate.value),
             child: IgnorePointer(
               child: TextField(
+                controller: _textFieldReleaseDate,
                 decoration: InputDecoration(
                   labelText: 'Lançamento',
                   border: OutlineInputBorder(),
@@ -118,10 +155,10 @@ class _GameWidgetState extends State<GameWidget> {
     );
   }
 
-  void showPicker() async {
+  void showPicker([DateTime date]) async {
     DateTime dateTime = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: date ?? DateTime.now(),
       firstDate: DateTime(1970),
       lastDate: DateTime(DateTime.now().year + 1),
       builder: (context, child) {
@@ -136,6 +173,9 @@ class _GameWidgetState extends State<GameWidget> {
         );
       }
     );
+    if (dateTime != null) {
+      _gameController.controllerReleaseDate.add(dateTime);
+    }
   }
 
   TextFormField _textFormField({
@@ -149,6 +189,7 @@ class _GameWidgetState extends State<GameWidget> {
               labelText: label
             ),
             validator: validator,
+            cursorColor: CustomColor.main,
           );
   }
 }
