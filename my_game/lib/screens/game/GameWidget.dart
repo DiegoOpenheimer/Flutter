@@ -137,7 +137,11 @@ class _GameWidgetState extends State<GameWidget> {
         }
         return Material(
           child: InkWell(
-            onTap: () => showPicker(_gameController.controllerReleaseDate.value),
+            onTap: () => Alert.showPicker(
+              context,
+              onComplete: _gameController.controllerReleaseDate.add,
+              date: _gameController.controllerReleaseDate.value
+            ),
             child: IgnorePointer(
               child: TextField(
                 controller: _textFieldReleaseDate,
@@ -155,28 +159,6 @@ class _GameWidgetState extends State<GameWidget> {
     );
   }
 
-  void showPicker([DateTime date]) async {
-    DateTime dateTime = await showDatePicker(
-      context: context,
-      initialDate: date ?? DateTime.now(),
-      firstDate: DateTime(1970),
-      lastDate: DateTime(DateTime.now().year + 1),
-      builder: (context, child) {
-        Color color = CustomColor.secondary;
-        return Theme(
-          data: ThemeData(
-            primaryColor: color,
-            accentColor: color,
-            backgroundColor: Colors.white
-          ),
-          child: child,
-        );
-      }
-    );
-    if (dateTime != null) {
-      _gameController.controllerReleaseDate.add(dateTime);
-    }
-  }
 
   TextFormField _textFormField({
     String label,
