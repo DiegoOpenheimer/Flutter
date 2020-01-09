@@ -1,12 +1,11 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_game/components/Alert.dart';
 import 'package:my_game/components/CustomAppBar.dart';
-import 'package:my_game/screens/game/GameController.dart';
 import 'package:my_game/shared/constants.dart';
 import 'package:my_game/shared/utils.dart';
+import 'controller/GameController.dart';
 
 class GameWidget extends StatefulWidget {
   @override
@@ -31,12 +30,6 @@ class _GameWidgetState extends State<GameWidget> {
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _gameController.dispose();
-  }
-
   Widget _body() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -52,11 +45,8 @@ class _GameWidgetState extends State<GameWidget> {
             _buildDatePicker(),
             SizedBox(height: 8,),
             Expanded(
-              child: StreamBuilder<Uint8List>(
-                stream: _gameController.controllerImage.stream,
-                builder: (context, snapshot) {
-                  return _buildContainerImage();
-                }
+              child: Observer(
+                builder: (_) => _buildContainerImage()
               ),
             ),
             Container(
@@ -73,7 +63,7 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   Widget _buildContainerImage() {
-    var image =  _gameController.controllerImage.value;
+    var image =  _gameController.image;
     var widget = image != null ? Image.memory(image, fit: BoxFit.cover,) : Container();
     return Stack(
       children: <Widget>[
@@ -86,7 +76,7 @@ class _GameWidgetState extends State<GameWidget> {
                 if (imageSource == null) return;
                 var image = await ImagePicker.pickImage(source: imageSource);
                 if (image != null) {
-                 _gameController.controllerImage.add(image.readAsBytesSync());
+                 _gameController.setImage(image.readAsBytesSync());
                 }
               });
             },
@@ -98,9 +88,8 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   Widget _dropdownButton() {
-    return StreamBuilder<String>(
-      stream: _gameController.controllerConsole.stream,
-      builder: (context, snapshot) {
+    return Observer(
+      builder: (_) {
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(4)),
@@ -113,8 +102,8 @@ class _GameWidgetState extends State<GameWidget> {
             hint: Text('Plataforma'),
             underline: SizedBox(),
             isExpanded: true,
-            value: snapshot.data,
-            onChanged: _gameController.controllerConsole.add,
+            value: _gameController.currentConsole,
+            onChanged: _gameController.setCurrentConsole,
             items: _gameController.consoles
             .map((value) {
               return DropdownMenuItem(
@@ -129,18 +118,17 @@ class _GameWidgetState extends State<GameWidget> {
   }
 
   Widget _buildDatePicker() {
-    return StreamBuilder<DateTime>(
-      stream: _gameController.controllerReleaseDate.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          _textFieldReleaseDate.text = Utils.formatterDate(snapshot.data);
+    return Observer(
+      builder: (_) {
+        if (_gameController.releaseDate != null) {
+          _textFieldReleaseDate.text = Utils.formatterDate(_gameController.releaseDate);
         }
         return Material(
           child: InkWell(
             onTap: () => Alert.showPicker(
               context,
-              onComplete: _gameController.controllerReleaseDate.add,
-              date: _gameController.controllerReleaseDate.value
+              onComplete: _gameController.setReleaseDate,
+              date: _gameController.releaseDate
             ),
             child: IgnorePointer(
               child: TextField(
