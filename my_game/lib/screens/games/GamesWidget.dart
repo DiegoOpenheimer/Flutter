@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:my_game/components/CustomAppBar.dart';
+import 'package:my_game/components/CustomDismissable.dart';
 import 'package:my_game/model/GameProvider.dart';
 import 'package:my_game/screens/games/controller/GamesController.dart';
 
@@ -47,10 +48,18 @@ class _GamesWidgetState extends State<GamesWidget> {
     Image image = game.cover == null ?
     Image.asset('assets/noCover.png', fit: BoxFit.cover, height: 70, width: 70,) :
     Image.memory(game.cover, fit: BoxFit.cover, height: 70, width: 70);
+    return CustomDismissable(
+      onDismiss: (_) => _gamesController.delete(game),
+      id: game.id.toString(),
+      child: _buildContentListItem(game, image),
+    );
+  }
+
+  Material _buildContentListItem(Game game, Image image) {
     return Material(
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed('/add-edit-game', arguments: game);
+          Navigator.of(context).pushNamed('/game-detail', arguments: game);
         },
         child: Padding(
           padding: const EdgeInsets.all(16),

@@ -29,12 +29,9 @@ class _GameWidgetState extends State<GameWidget> {
   @override
   void initState() {
     super.initState();
+    _gameController.init(widget.game);
     if (widget.game != null) {
      _textFieldName.text = widget.game.name;
-     _gameController.setReleaseDate(widget.game.releaseDate);
-     _gameController.setImage(widget.game.cover);
-     _gameController.setCurrentConsole(widget.game.console?.id);
-     _gameController.game = widget.game;
     }
   }
 
@@ -75,7 +72,7 @@ class _GameWidgetState extends State<GameWidget> {
                 onPressed: () async {
                   if (_formKey.currentState.validate()) {
                     await _gameController.saveGame(_textFieldName.text);
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(_gameController.game);
                   }
                 },
                 child: Text('Registrar', style: TextStyle(color: Colors.white),),
@@ -175,7 +172,7 @@ class _GameWidgetState extends State<GameWidget> {
 
   TextFormField _textFormField({
     String label,
-    Function(String) validator,
+    String Function(String) validator,
     TextEditingController controller
   }) {
     return TextFormField(

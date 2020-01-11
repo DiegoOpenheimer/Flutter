@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_game/model/GameProvider.dart';
+import 'package:my_game/screens/details/GameDetails.dart';
 import 'package:my_game/screens/game/GameWidget.dart';
 import 'package:my_game/screens/home/HomeWidget.dart';
 import 'package:my_game/shared/constants.dart';
@@ -29,12 +31,15 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomeWidget(),
       },
       onGenerateRoute: (RouteSettings settings) {
-        if (settings.name == '/add-edit-game') {
-          return MaterialPageRoute(
+        Map screens = {
+          '/add-edit-game': () => MaterialPageRoute<Game>(
             builder: (_) => GameWidget(game: settings.arguments,)
-          );
-        }
-        return null;
+          ),
+          '/game-detail': () => MaterialPageRoute(
+            builder: (_) => GameDetailWidget(settings.arguments,)
+          )
+        };
+        return screens[settings.name]();
       },
     );
   }

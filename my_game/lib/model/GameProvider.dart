@@ -80,6 +80,9 @@ class GameProvider {
     return db.update(tableName, game.toMapToSaveOnDB(), where: "id = ?", whereArgs: [game.id]);
   }
 
-
+  Future<int> delete(Game game) async {
+    Database db = await _coreDatabase.database;
+    return db.delete(tableName, where: "id = ?", whereArgs: [game.id]);
+  }
 
 }

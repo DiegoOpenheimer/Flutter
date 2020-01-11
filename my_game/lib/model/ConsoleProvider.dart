@@ -8,6 +8,8 @@ class Console {
   int id;
   String name;
 
+  Console({ this.name });
+
   Console.fromMap(Map map) {
     id = map["id"];
     name = map["name"];
@@ -41,6 +43,18 @@ class ConsoleProvider {
     Database db = await _coreDatabase.database;
     return (await db.query(tableName))
         .map<Console>((map) => Console.fromMap(map)).toList();
+  }
+
+  Future<Console> insert(String name) async {
+    Database db = await _coreDatabase.database;
+    Console console = Console(name: name);
+    console.id = await db.insert(tableName, console.toMap());
+    return console;
+  }
+
+  Future<int> delete(Console console) async {
+    Database db = await _coreDatabase.database;
+    return db.delete(tableName, where: "id = ?", whereArgs: [console.id]);
   }
 
 }

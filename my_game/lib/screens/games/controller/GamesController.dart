@@ -20,5 +20,10 @@ abstract class _GamesController with Store {
     setGames(await _gameProvider.loadGames());
   }
 
+  Future delete(Game game) async {
+    await _gameProvider.delete(game);
+    games.remove(game);
+  }
+
 
 }

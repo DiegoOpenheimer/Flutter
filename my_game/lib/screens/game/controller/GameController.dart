@@ -42,8 +42,14 @@ abstract class _GameController with Store {
 
   @action void setConsoles(List<Console> consoles) => this.consoles = consoles;
 
-  Future init() async {
+  Future init(Game game) async {
     setConsoles(await _consoleProvider.loadConsoles());
+    if (game != null) {
+      this.game = game;
+      setReleaseDate(game.releaseDate);
+      setImage(game.cover);
+      setCurrentConsole(game.console?.id);
+    }
   }
 
   Future saveGame(String name) async {
@@ -58,6 +64,7 @@ abstract class _GameController with Store {
     } else {
       await _gameProvider.insert(gameTemp);
     }
+    return game;
   }
 
   String validateName(String text)  {
