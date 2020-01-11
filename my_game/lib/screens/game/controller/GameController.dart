@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'package:mobx/mobx.dart';
+import 'package:my_game/model/ConsoleProvider.dart';
+import 'package:my_game/model/GameProvider.dart';
 
 part 'GameController.g.dart';
 
@@ -7,11 +9,21 @@ class GameController = _GameController with _$GameController;
 
 abstract class _GameController with Store {
 
+  ConsoleProvider _consoleProvider = ConsoleProvider();
+  GameProvider _gameProvider = GameProvider();
+
+  Game game;
+
   @observable
-  String currentConsole;
+  Console currentConsole;
 
   @action
-  void setCurrentConsole(String value) => currentConsole = value;
+  void setCurrentConsole(int value) {
+    currentConsole = consoles.firstWhere(
+      (console) => console.id == value,
+      orElse: () => null
+    );
+  }
 
   @observable
   DateTime releaseDate;
@@ -25,7 +37,28 @@ abstract class _GameController with Store {
   @action
   void setImage(Uint8List image) => this.image = image;
 
-  List<String> consoles = ['xbox', 'nintendo', 'playstation', 'mega drive'];
+  @observable
+  List<Console> consoles = [];
+
+  @action void setConsoles(List<Console> consoles) => this.consoles = consoles;
+
+  Future init() async {
+    setConsoles(await _consoleProvider.loadConsoles());
+  }
+
+  Future saveGame(String name) async {
+    Game gameTemp = game != null ? game : Game();
+    gameTemp
+      ..name = name
+      ..releaseDate = releaseDate
+      ..cover = image
+      ..console = currentConsole;
+    if (game != null) {
+      await _gameProvider.update(gameTemp);
+    } else {
+      await _gameProvider.insert(gameTemp);
+    }
+  }
 
   String validateName(String text)  {
     if (text.isEmpty) {

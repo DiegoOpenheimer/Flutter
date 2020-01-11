@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:my_game/components/CustomAppBar.dart';
-import 'package:my_game/screens/games/GamesController.dart';
+import 'package:my_game/model/GameProvider.dart';
+import 'package:my_game/screens/games/controller/GamesController.dart';
 
 class GamesWidget extends StatefulWidget {
   @override
@@ -18,8 +21,10 @@ class _GamesWidgetState extends State<GamesWidget> {
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () =>
-                  Navigator.of(context).pushNamed('/add-edit-game'),
+              onPressed: () async {
+                await Navigator.of(context).pushNamed('/add-edit-game');
+                _gamesController.init();
+              }
             )
           ]),
       body: _body(),
@@ -27,7 +32,41 @@ class _GamesWidgetState extends State<GamesWidget> {
   }
 
   Widget _body() {
-    return Container();
+    return Observer(
+      builder: (_) {
+        return ListView.separated(
+          separatorBuilder: (c, i) => Divider(height: 1,),
+          itemCount: _gamesController.games.length,
+          itemBuilder: (_, int index) => _item(_gamesController.games[index]),
+        );
+      },
+    );
+  }
+
+  Widget _item(Game game) {
+    Image image = game.cover == null ?
+    Image.asset('assets/noCover.png', fit: BoxFit.cover, height: 70, width: 70,) :
+    Image.memory(game.cover, fit: BoxFit.cover, height: 70, width: 70);
+    return Material(
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pushNamed('/add-edit-game', arguments: game);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: <Widget>[
+              image,
+              SizedBox(width: 16,),
+              Expanded(
+                child: Text(game.name, overflow: TextOverflow.ellipsis, maxLines: 2,),
+              ),
+              Icon(Icons.arrow_forward, color: Colors.grey,)
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override

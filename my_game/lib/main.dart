@@ -27,7 +27,14 @@ class MyApp extends StatelessWidget {
       ),
       routes: <String, WidgetBuilder> {
         '/': (context) => HomeWidget(),
-        '/add-edit-game': (context) => GameWidget()
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        if (settings.name == '/add-edit-game') {
+          return MaterialPageRoute(
+            builder: (_) => GameWidget(game: settings.arguments,)
+          );
+        }
+        return null;
       },
     );
   }

@@ -3,11 +3,17 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_game/components/Alert.dart';
 import 'package:my_game/components/CustomAppBar.dart';
+import 'package:my_game/model/GameProvider.dart';
 import 'package:my_game/shared/constants.dart';
 import 'package:my_game/shared/utils.dart';
 import 'controller/GameController.dart';
 
 class GameWidget extends StatefulWidget {
+
+  final Game game;
+
+  GameWidget({this.game});
+
   @override
   _GameWidgetState createState() => _GameWidgetState();
 }
@@ -16,7 +22,21 @@ class _GameWidgetState extends State<GameWidget> {
 
   final _formKey = GlobalKey<FormState>();
   final _textFieldReleaseDate = TextEditingController();
+  final _textFieldName = TextEditingController();
   final _gameController = GameController();
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.game != null) {
+     _textFieldName.text = widget.game.name;
+     _gameController.setReleaseDate(widget.game.releaseDate);
+     _gameController.setImage(widget.game.cover);
+     _gameController.setCurrentConsole(widget.game.console?.id);
+     _gameController.game = widget.game;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +58,7 @@ class _GameWidgetState extends State<GameWidget> {
         key: _formKey,
         child: Column(
           children: <Widget>[
-            _textFormField(label: "Nome do jogo", validator: _gameController.validateName),
+            _textFormField(label: "Nome do jogo", validator: _gameController.validateName, controller: _textFieldName),
             SizedBox(height: 8,),
             _dropdownButton(),
             SizedBox(height: 8,),
@@ -52,7 +72,12 @@ class _GameWidgetState extends State<GameWidget> {
             Container(
               width: double.infinity,
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  if (_formKey.currentState.validate()) {
+                    await _gameController.saveGame(_textFieldName.text);
+                    Navigator.of(context).pop();
+                  }
+                },
                 child: Text('Registrar', style: TextStyle(color: Colors.white),),
               ),
             )
@@ -74,7 +99,7 @@ class _GameWidgetState extends State<GameWidget> {
             onPressed: () {
               Alert.showActionSheet(context, onComplete: (imageSource) async {
                 if (imageSource == null) return;
-                var image = await ImagePicker.pickImage(source: imageSource);
+                var image = await ImagePicker.pickImage(source: imageSource).catchError((e) => null);
                 if (image != null) {
                  _gameController.setImage(image.readAsBytesSync());
                 }
@@ -98,17 +123,17 @@ class _GameWidgetState extends State<GameWidget> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
           alignment: Alignment.center,
-          child: DropdownButton(
+          child: DropdownButton<int>(
             hint: Text('Plataforma'),
             underline: SizedBox(),
             isExpanded: true,
-            value: _gameController.currentConsole,
+            value: _gameController.currentConsole?.id,
             onChanged: _gameController.setCurrentConsole,
             items: _gameController.consoles
             .map((value) {
               return DropdownMenuItem(
-                value: value,
-                child: Text(value),
+                value: value.id,
+                child: Text(value.name),
               );
             }).toList(),
           ),
@@ -150,7 +175,8 @@ class _GameWidgetState extends State<GameWidget> {
 
   TextFormField _textFormField({
     String label,
-    Function(String) validator
+    Function(String) validator,
+    TextEditingController controller
   }) {
     return TextFormField(
             decoration: InputDecoration(
@@ -160,6 +186,7 @@ class _GameWidgetState extends State<GameWidget> {
             ),
             validator: validator,
             cursorColor: CustomColor.main,
+            controller: controller,
           );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:my_game/model/ConsoleProvider.dart';
+import 'package:my_game/model/GameProvider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -14,24 +16,8 @@ class CoreDatabase {
     return await openDatabase(path, version: 1,
       onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON'),
       onCreate: (Database db, int version) async {
-        await db.execute('''
-            CREATE TABLE IF NOT EXISTS console (
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              name TEXT
-            );
-        ''');
-
-        await db.execute('''
-            CREATE TABLE IF NOT EXISTS game(
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              name TEXT NOT NULL,
-              releaseDate INT,
-              cover BLOB,
-              consoleId INTEGER,
-              FOREIGN KEY(consoleId) REFERENCES console(id)
-              ON DELETE SET NULL ON UPDATE NO ACTION
-            );
-        ''');
+        await db.execute(GameProvider.table);
+        await db.execute(ConsoleProvider.table);
       }
     );
   }

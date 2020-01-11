@@ -12,14 +12,14 @@ mixin _$GameController on _GameController, Store {
   final _$currentConsoleAtom = Atom(name: '_GameController.currentConsole');
 
   @override
-  String get currentConsole {
+  Console get currentConsole {
     _$currentConsoleAtom.context.enforceReadPolicy(_$currentConsoleAtom);
     _$currentConsoleAtom.reportObserved();
     return super.currentConsole;
   }
 
   @override
-  set currentConsole(String value) {
+  set currentConsole(Console value) {
     _$currentConsoleAtom.context.conditionallyRunInAction(() {
       super.currentConsole = value;
       _$currentConsoleAtom.reportChanged();
@@ -60,11 +60,28 @@ mixin _$GameController on _GameController, Store {
     }, _$imageAtom, name: '${_$imageAtom.name}_set');
   }
 
+  final _$consolesAtom = Atom(name: '_GameController.consoles');
+
+  @override
+  List<Console> get consoles {
+    _$consolesAtom.context.enforceReadPolicy(_$consolesAtom);
+    _$consolesAtom.reportObserved();
+    return super.consoles;
+  }
+
+  @override
+  set consoles(List<Console> value) {
+    _$consolesAtom.context.conditionallyRunInAction(() {
+      super.consoles = value;
+      _$consolesAtom.reportChanged();
+    }, _$consolesAtom, name: '${_$consolesAtom.name}_set');
+  }
+
   final _$_GameControllerActionController =
       ActionController(name: '_GameController');
 
   @override
-  void setCurrentConsole(String value) {
+  void setCurrentConsole(int value) {
     final _$actionInfo = _$_GameControllerActionController.startAction();
     try {
       return super.setCurrentConsole(value);
@@ -88,6 +105,16 @@ mixin _$GameController on _GameController, Store {
     final _$actionInfo = _$_GameControllerActionController.startAction();
     try {
       return super.setImage(image);
+    } finally {
+      _$_GameControllerActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setConsoles(List<Console> consoles) {
+    final _$actionInfo = _$_GameControllerActionController.startAction();
+    try {
+      return super.setConsoles(consoles);
     } finally {
       _$_GameControllerActionController.endAction(_$actionInfo);
     }
