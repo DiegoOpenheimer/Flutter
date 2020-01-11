@@ -41,20 +41,25 @@ class ConsoleProvider {
 
   Future<List<Console>> loadConsoles() async {
     Database db = await _coreDatabase.database;
-    return (await db.query(tableName))
+    List consoles =  (await db.query(tableName))
         .map<Console>((map) => Console.fromMap(map)).toList();
+    await db.close();
+    return consoles;
   }
 
   Future<Console> insert(String name) async {
     Database db = await _coreDatabase.database;
     Console console = Console(name: name);
     console.id = await db.insert(tableName, console.toMap());
+    await db.close();
     return console;
   }
 
   Future<int> delete(Console console) async {
     Database db = await _coreDatabase.database;
-    return db.delete(tableName, where: "id = ?", whereArgs: [console.id]);
+    int id = await db.delete(tableName, where: "id = ?", whereArgs: [console.id]);
+    await db.close();
+    return id;
   }
 
 }

@@ -49,13 +49,13 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
   Widget _body() {
     ImageProvider image = game.cover != null ?
       MemoryImage(game.cover) :
-      AssetImage("assets/noCoverFull");
+      AssetImage("assets/noCoverFull.png");
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(game.name, style: TextStyle(fontSize: 38), maxLines: 5, overflow: TextOverflow.ellipsis,),
+          Text(game.name, style: TextStyle(fontSize: 38), maxLines: 3, overflow: TextOverflow.ellipsis,),
           SizedBox(height: 8,),
           game.console != null ? _buildConsoleName() : Container(),
           game.releaseDate != null ? Text(Utils.formatterDate(game.releaseDate), style: TextStyle(fontSize: 20), maxLines: 5, overflow: TextOverflow.ellipsis,) : Container(),

@@ -18,7 +18,8 @@ class CoreDatabase {
       onCreate: (Database db, int version) async {
         await db.execute(GameProvider.table);
         await db.execute(ConsoleProvider.table);
-      }
+      },
+      onDowngrade: onDatabaseDowngradeDelete
     );
   }
 

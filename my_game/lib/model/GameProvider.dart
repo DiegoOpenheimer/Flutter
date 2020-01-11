@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:my_game/services/Database.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -67,22 +68,30 @@ class GameProvider {
     ''';
     Database db = await _coreDatabase.database;
     List<Map<String, dynamic>> list = await db.rawQuery(sql);
-    return list.map<Game>((map) => Game.fromMap(map)).toList();
+    List games = list.map<Game>((map) => Game.fromMap(map)).toList();
+    await db.close();
+    return games;
   }
 
   Future<int> insert(Game game) async {
     Database db = await _coreDatabase.database;
-    return db.insert(tableName, game.toMapToSaveOnDB());
+    int id = await db.insert(tableName, game.toMapToSaveOnDB());
+    await db.close();
+    return id;
   }
 
   Future<int> update(Game game) async {
     Database db = await _coreDatabase.database;
-    return db.update(tableName, game.toMapToSaveOnDB(), where: "id = ?", whereArgs: [game.id]);
+    int id = await db.update(tableName, game.toMapToSaveOnDB(), where: "id = ?", whereArgs: [game.id]);
+    await db.close();
+    return id;
   }
 
   Future<int> delete(Game game) async {
     Database db = await _coreDatabase.database;
-    return db.delete(tableName, where: "id = ?", whereArgs: [game.id]);
+    int id = await db.delete(tableName, where: "id = ?", whereArgs: [game.id]);
+    await db.close();
+    return id;
   }
 
 }

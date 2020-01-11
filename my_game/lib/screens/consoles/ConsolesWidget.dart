@@ -36,10 +36,15 @@ class ConsolesWidget extends StatelessWidget {
   Widget _body(context) {
     return Observer(
       builder: (_) {
-        return ListView.separated(
-          separatorBuilder: (c, i) => Divider(height: 1,),
-          itemCount: _consolesController.consoles.length,
-          itemBuilder: (_, int index) => _item(_consolesController.consoles[index]),
+        if (_consolesController.consoles.isNotEmpty) {
+          return ListView.separated(
+            separatorBuilder: (c, i) => Divider(height: 1,),
+            itemCount: _consolesController.consoles.length,
+            itemBuilder: (_, int index) => _item(_consolesController.consoles[index]),
+          );
+        }
+        return Center(
+          child: Text('Nenhuma plataforma cadastrada', style: TextStyle(fontSize: 20),),
         );
       }
     );

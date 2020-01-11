@@ -35,10 +35,15 @@ class _GamesWidgetState extends State<GamesWidget> {
   Widget _body() {
     return Observer(
       builder: (_) {
-        return ListView.separated(
-          separatorBuilder: (c, i) => Divider(height: 1,),
-          itemCount: _gamesController.games.length,
-          itemBuilder: (_, int index) => _item(_gamesController.games[index]),
+        if (_gamesController.games.isNotEmpty) {
+          return ListView.separated(
+            separatorBuilder: (c, i) => Divider(height: 1,),
+            itemCount: _gamesController.games.length,
+            itemBuilder: (_, int index) => _item(_gamesController.games[index]),
+          );
+        }
+        return Center(
+          child: Text('Nenhum jogo cadastrado', style: TextStyle(fontSize: 20),),
         );
       },
     );

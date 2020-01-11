@@ -96,7 +96,7 @@ class _GameWidgetState extends State<GameWidget> {
             onPressed: () {
               Alert.showActionSheet(context, onComplete: (imageSource) async {
                 if (imageSource == null) return;
-                var image = await ImagePicker.pickImage(source: imageSource).catchError((e) => null);
+                var image = await ImagePicker.pickImage(source: imageSource, maxHeight: 1280, maxWidth: 720).catchError((e) => null);
                 if (image != null) {
                  _gameController.setImage(image.readAsBytesSync());
                 }
