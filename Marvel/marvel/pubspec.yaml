@@ -23,7 +23,7 @@ dependencies:
   bloc_pattern: ^2.1.9+3
   crypto: ^2.0.6
   rxdart: ^0.22.0
-  cached_network_image: ^0.8.0
+  cached_network_image: ^2.0.0-rc
   connectivity: ^0.4.3+2
 
   # The following adds the Cupertino Icons font to your application.
