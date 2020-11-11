@@ -11,23 +11,16 @@ class RandomViewModel extends GetxController with LoadingRequest {
   RandomViewModel(this._randomRepository);
 
   @override
-  void onInit() {
-    super.onInit();
-    loadData();
-  }
-
-
-  @override
   void onClose() {
     super.onClose();
     _randomRepository.dispose();
   }
 
-  Future loadData() async {
+  Future loadData({ String query }) async {
     loading.value = true;
     error.value = "";
     try {
-      random.value = await _randomRepository.getRandom();
+      random.value = await _randomRepository.getRandom(query: query);
     } catch (e) {
       error.value = e;
     } finally {

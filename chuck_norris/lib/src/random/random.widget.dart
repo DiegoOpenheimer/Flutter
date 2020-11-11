@@ -4,15 +4,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RandomWidget extends StatelessWidget {
+class RandomWidget extends StatefulWidget {
+
+  @override
+  _RandomWidgetState createState() => _RandomWidgetState();
+}
+
+class _RandomWidgetState extends State<RandomWidget> {
 
   final RandomViewModel _randomViewModel = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    _randomViewModel.loadData(query: Get.arguments);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Chuck Norris'), actions: [
-        IconButton(icon: Icon(Icons.update), onPressed: _randomViewModel.loadData)
+        IconButton(icon: Icon(Icons.update), onPressed: () => _randomViewModel.loadData(query: Get.arguments))
       ], automaticallyImplyLeading: false,),
       body: Container(
         padding: const EdgeInsets.all(16),

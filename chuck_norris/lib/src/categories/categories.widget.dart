@@ -56,7 +56,7 @@ class CategoriesWidget extends StatelessWidget {
       },
       child: ListTile(
         title: Text(categories[index]),
-        onTap: () { print(categories[index]); },
+        onTap: () => Get.toNamed('/random', arguments: categories[index]),
         trailing: Icon(Icons.arrow_forward_ios),
       ),
     );

@@ -10,10 +10,14 @@ class RandomRepositoryImpl implements RandomRepository {
   RandomRepositoryImpl(this.dio);
 
   @override
-  Future<Random> getRandom() async {
+  Future<Random> getRandom({ String query }) async {
     try {
+      Map<String, String> parameters = {};
+      if (query != null && query.isNotEmpty) {
+        parameters.putIfAbsent('category', () => query);
+      }
       _cancelToken = CancelToken();
-      Response response = await dio.get('/random', cancelToken: _cancelToken);
+      Response response = await dio.get('/random', queryParameters: parameters, cancelToken: _cancelToken);
       return Random.fromJson(response.data);
     } on DioError catch (e) {
       if (e?.type != DioErrorType.CANCEL) {
