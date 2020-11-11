@@ -42,7 +42,7 @@ class CategoriesWidget extends StatelessWidget {
   Widget _buildListTile(List<String> categories, int index) {
     return TweenAnimationBuilder(
       curve: Curves.easeOutSine,
-      duration: Duration(milliseconds: 300 * (index + 1)),
+      duration: Duration(milliseconds: 200 * (index + 1)),
       tween: Tween(begin: Offset(0, 250), end: Offset(0, 0)),
       builder: (context, offset, child) {
         return Transform.translate(
