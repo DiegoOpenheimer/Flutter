@@ -29,13 +29,14 @@ class RandomWidget extends StatelessWidget {
       children: [
         Image.asset('assets/imgs/chuck-norris.png'),
         SizedBox(height: 16,),
-        Obx(_buildInformation)
+        Obx(_buildInformation),
+        SizedBox(height: 16,)
       ],
     );
   }
 
   Widget _buildInformation() {
-    if (_randomViewModel.isLoading.value) {
+    if (_randomViewModel.loading.value) {
       return CircularProgressIndicator();
     }
     if (_randomViewModel.error.value.isNotEmpty) {

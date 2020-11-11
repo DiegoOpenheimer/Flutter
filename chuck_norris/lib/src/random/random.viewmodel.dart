@@ -1,13 +1,11 @@
-
 import 'package:chuck_norris/src/random/repository/random.repository.dart';
+import 'package:chuck_norris/src/shared/LoadingRequest.dart';
 import 'package:get/get.dart';
 import 'package:chuck_norris/src/random/random.model.dart';
 
-class RandomViewModel extends GetxController {
+class RandomViewModel extends GetxController with LoadingRequest {
 
   Rx<Random> random = Rx();
-  RxBool isLoading = true.obs;
-  RxString error = "".obs;
   RandomRepository _randomRepository;
 
   RandomViewModel(this._randomRepository);
@@ -26,14 +24,14 @@ class RandomViewModel extends GetxController {
   }
 
   Future loadData() async {
-    isLoading.value = true;
+    loading.value = true;
     error.value = "";
     try {
       random.value = await _randomRepository.getRandom();
     } catch (e) {
       error.value = e;
     } finally {
-      isLoading.value = false;
+      loading.value = false;
     }
   }
 

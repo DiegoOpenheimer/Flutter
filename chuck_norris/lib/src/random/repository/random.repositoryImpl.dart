@@ -17,9 +17,10 @@ class RandomRepositoryImpl implements RandomRepository {
       return Random.fromJson(response.data);
     } on DioError catch (e) {
       if (e?.type != DioErrorType.CANCEL) {
-        throw ('Fail to get random, verify connection with network');
+        throw ('Fail to get random, verify network connection...');
       }
     }
+    return null;
   }
 
   void dispose() {
