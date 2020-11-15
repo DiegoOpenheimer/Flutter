@@ -1,3 +1,4 @@
+import 'package:chuck_norris/src/search/search.delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,6 +7,7 @@ class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(16),
@@ -25,7 +27,9 @@ class HomeWidget extends StatelessWidget {
         ),
         _buildItem(title: 'Random', icon: Icons.autorenew, route: '/random'),
         _buildItem(title: 'Categories', icon: Icons.book, route: '/categories'),
-        _buildItem(title: 'Search', icon: Icons.search, route: '/search'),
+        _buildItem(title: 'Search', icon: Icons.search, route: '/search', onPress: () {
+          showSearch(context: Get.context, delegate: SearchMessage());
+        }),
       ],
     );
   }
@@ -33,14 +37,21 @@ class HomeWidget extends StatelessWidget {
   Widget _buildItem({
     @required String title,
     @required IconData icon,
-    @required String route
+    @required String route,
+    Function onPress
   }) {
     assert(title != null);
     assert(icon != null);
     assert(route != null);
     return InkWell(
       borderRadius: BorderRadius.all(Radius.circular(10)),
-      onTap: () => Get.toNamed(route),
+      onTap: () {
+        if (onPress != null) {
+          onPress();
+        } else {
+          Get.toNamed(route);
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: TweenAnimationBuilder(

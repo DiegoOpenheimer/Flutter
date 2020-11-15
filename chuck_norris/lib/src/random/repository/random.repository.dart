@@ -1,10 +1,9 @@
 
-
-import 'package:chuck_norris/src/random/random.model.dart';
+import 'package:chuck_norris/src/shared/model/message.model.dart';
 
 abstract class RandomRepository {
 
-  Future<Random> getRandom({ String query });
+  Future<Message> getRandom({ String query });
 
   void dispose();
 

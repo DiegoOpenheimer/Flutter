@@ -1,11 +1,11 @@
 import 'package:chuck_norris/src/random/repository/random.repository.dart';
 import 'package:chuck_norris/src/shared/LoadingRequest.dart';
 import 'package:get/get.dart';
-import 'package:chuck_norris/src/random/random.model.dart';
+import 'package:chuck_norris/src/shared/model/message.model.dart';
 
 class RandomViewModel extends GetxController with LoadingRequest {
 
-  Rx<Random> random = Rx();
+  Rx<Message> random = Rx();
   RandomRepository _randomRepository;
 
   RandomViewModel(this._randomRepository);

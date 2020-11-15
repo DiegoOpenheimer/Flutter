@@ -1,5 +1,5 @@
-class Random {
-    Random({
+class Message {
+    Message({
         this.createdAt,
         this.iconUrl,
         this.id,
@@ -15,7 +15,7 @@ class Random {
     String url;
     String value;
 
-    factory Random.fromJson(Map<String, dynamic> json) => Random(
+    factory Message.fromJson(Map<String, dynamic> json) => Message(
         createdAt: DateTime.parse(json["created_at"]),
         iconUrl: json["icon_url"],
         id: json["id"],
