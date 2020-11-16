@@ -15,6 +15,7 @@ class ChuckNorrisApp extends StatelessWidget {
       initialBinding: ChuckNorrisBindings(),
       theme: ThemeData(
           appBarTheme: AppBarTheme(
+              brightness: Brightness.light,
               color: Colors.transparent,
               elevation: 0,
               centerTitle: true,
