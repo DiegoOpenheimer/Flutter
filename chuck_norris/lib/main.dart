@@ -11,6 +11,7 @@ class ChuckNorrisApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Chuck norris',
       themeMode: ThemeMode.system,
+      darkTheme: ThemeData.dark().copyWith(accentColor: Colors.orange[900]),
       initialBinding: ChuckNorrisBindings(),
       theme: ThemeData(
           appBarTheme: AppBarTheme(
@@ -20,8 +21,7 @@ class ChuckNorrisApp extends StatelessWidget {
               textTheme: Theme.of(context)
                   .textTheme
                   .copyWith(headline5: TextStyle(color: Colors.black)),
-              iconTheme: IconThemeData(color: Colors.black)
-          ),
+              iconTheme: IconThemeData(color: Colors.black)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
           accentColor: Colors.orange[900]),
       getPages: routes,

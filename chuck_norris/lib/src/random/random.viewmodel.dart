@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:chuck_norris/src/shared/model/message.model.dart';
 
 class RandomViewModel extends GetxController with LoadingRequest {
-
   Rx<Message> random = Rx();
   RandomRepository _randomRepository;
 
@@ -16,7 +15,8 @@ class RandomViewModel extends GetxController with LoadingRequest {
     _randomRepository.dispose();
   }
 
-  Future loadData({ String query }) async {
+  Future loadData({String query}) async {
+    random.value = null;
     loading.value = true;
     error.value = "";
     try {
@@ -27,5 +27,4 @@ class RandomViewModel extends GetxController with LoadingRequest {
       loading.value = false;
     }
   }
-
 }
