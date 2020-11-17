@@ -18,7 +18,7 @@ class SharedComponent extends StatelessWidget {
             icon: Icon(Icons.share),
             onPressed: () {
               Get.find<CustomShared>().sharedWithImage(
-                  path: 'assets/imgs/chuck-norris.png',
+                  path: 'assets/imgs/chucknorris_logo.jpg',
                   text: observable.value?.value ?? text);
             }),
       );

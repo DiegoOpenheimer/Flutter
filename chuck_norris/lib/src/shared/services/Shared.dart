@@ -9,12 +9,12 @@ class CustomShared {
     Directory temp = await getTemporaryDirectory();
     ByteData bytes = await rootBundle.load(path);
 
-    File file = new File('${temp.path}/chuck-norris.png');
+    File file = new File('${temp.path}/chuck-norris.jpg');
     bool exist = await file.exists();
     if (!exist) {
       File newFile = await file.create();
       await newFile.writeAsBytes(bytes.buffer.asUint8List());
     }
-    Share.shareFiles([file.path], text: text);
+    await Share.shareFiles([file.path], text: text);
   }
 }
