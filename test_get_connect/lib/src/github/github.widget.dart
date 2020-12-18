@@ -63,6 +63,7 @@ class _GitHubWidgetState extends State<GitHubWidget> with SingleTickerProviderSt
                 prefix: Icon(CupertinoIcons.search),
                 placeholder: 'Search by repositories',
                 onSubmitted: (value) {
+                  controller.owner.value = null;
                   controller.changeSearchBar(value);
                   animation.reset();
                 },
