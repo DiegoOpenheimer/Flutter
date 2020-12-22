@@ -26,6 +26,12 @@ class _GitHubWidgetState extends State<GitHubWidget> with SingleTickerProviderSt
     ));
   }
 
+  @override
+  void dispose() {
+    animation?.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {

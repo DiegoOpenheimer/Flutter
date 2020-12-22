@@ -12,19 +12,11 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Home'),
-        trailing: CupertinoButton(
-          padding: const EdgeInsets.all(0),
-          onPressed: () => Get.toNamed('/github'),
-          child: Icon(CupertinoIcons.add)
-        ),
+        middle: Text('Home')
       ),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          _body(),
-          _buildFloatingButton()
-        ],
+      child: Container(
+        width: Get.width,
+        child: _body()
       ),
     );
   }
@@ -33,9 +25,6 @@ class HomeWidget extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Obx(() {
-          return Text('Counter: ${controller.counter}');
-        }),
         SizedBox(height: 16),
         CupertinoButton.filled(
           child: Text('GithubPage'),
@@ -44,19 +33,5 @@ class HomeWidget extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildFloatingButton() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Align(
-        alignment: Alignment.bottomRight,
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: controller.increment,
-        ),
-      ),
-    );
-  }
-
 
 }
