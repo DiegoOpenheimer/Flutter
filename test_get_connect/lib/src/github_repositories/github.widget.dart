@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:test_get_connect/src/github/components/github.list.dart';
-import 'package:test_get_connect/src/github/github.controller.dart';
+import 'package:test_get_connect/src/github_repositories/components/github.list.dart';
+import 'package:test_get_connect/src/github_repositories/github.controller.dart';
 
-class GitHubWidget extends StatefulWidget {
+class GitHubRepositoryWidget extends StatefulWidget {
 
   @override
-  _GitHubWidgetState createState() => _GitHubWidgetState();
+  _GitHubRepositoryWidgetState createState() => _GitHubRepositoryWidgetState();
 }
 
-class _GitHubWidgetState extends State<GitHubWidget> with SingleTickerProviderStateMixin {
+class _GitHubRepositoryWidgetState extends State<GitHubRepositoryWidget> with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController(text: 'DiegoOpenheimer');
-  final controller = Get.find<GitHubController>();
+  final controller = Get.find<GitHubRepositoryController>();
   AnimationController animation;
   Animation<double> animationScale;
 
@@ -29,6 +29,7 @@ class _GitHubWidgetState extends State<GitHubWidget> with SingleTickerProviderSt
   @override
   void dispose() {
     animation?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

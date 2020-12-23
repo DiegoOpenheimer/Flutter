@@ -1,7 +1,6 @@
-
-
 import 'package:get/route_manager.dart';
-import 'package:test_get_connect/src/github/github.route.dart';
+import 'package:test_get_connect/src/github_emojis/github_emojis.route.dart';
+import 'package:test_get_connect/src/github_repositories/github.route.dart';
 import 'package:test_get_connect/src/home/home.route.dart';
 
 abstract class Route {
@@ -21,7 +20,8 @@ class AppRoute implements Route {
   List<GetPage> routes() {
     return [
       ...HomeRoute().routes(),
-      ...GitHubRoute().routes(),
+      ...GitHubRepositoryRoute().routes(),
+      ...GithubEmojisRoute().routes()
     ];
   }
 

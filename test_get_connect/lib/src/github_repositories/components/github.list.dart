@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test_get_connect/src/github/model/repository.dart';
+import 'package:test_get_connect/src/github_repositories/model/repository.dart';
 
 typedef OnPress = void Function(Repository);
 
@@ -13,11 +13,13 @@ class GitHubListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: repositories.length,
-      itemBuilder: (BuildContext context, int index) {
-        return _item(repositories[index]);
-      },
+    return CupertinoScrollbar(
+      child: ListView.builder(
+        itemCount: repositories.length,
+        itemBuilder: (BuildContext context, int index) {
+          return _item(repositories[index]);
+        },
+      ),
     );
   }
 

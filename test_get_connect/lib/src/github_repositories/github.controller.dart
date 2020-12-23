@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:test_get_connect/src/core/services/link.service.dart';
-import 'package:test_get_connect/src/github/model/repository.dart';
-import 'package:test_get_connect/src/github/repositories/github.repository.dart';
+import 'package:test_get_connect/src/core/ui.service.dart';
+import 'package:test_get_connect/src/github_repositories/model/repository.dart';
+import 'package:test_get_connect/src/github_repositories/repositories/github.repository.dart';
 
-class GitHubController extends GetxController with StateMixin<List<Repository>> {
+class GitHubRepositoryController extends GetxController with StateMixin<List<Repository>> {
 
   final GitHubRepository _repository;
   final Link _link;
+  final UI _ui;
   Rx<Owner> owner = Rx();
 
-  GitHubController(this._repository, this._link);
+  GitHubRepositoryController(this._repository, this._link, this._ui);
 
   @override
   void onInit() {
@@ -27,7 +29,7 @@ class GitHubController extends GetxController with StateMixin<List<Repository>> 
       }
       change(repositories, status: RxStatus.success());
     } on String catch(e) {
-      showSnack(e);
+      _ui.showSnackBar(e);
       change([], status: RxStatus.error(e));
     }
   }
@@ -38,20 +40,6 @@ class GitHubController extends GetxController with StateMixin<List<Repository>> 
 
   void openLink(Repository repository) {
     _link.launchURL(url: repository.htmlUrl);
-  }
-
-  void showSnack(String message) {
-    Get.showSnackbar(GetBar(
-      backgroundColor: Colors.red,
-      icon: Icon(Icons.dangerous, color: Colors.white),
-      shouldIconPulse: true,
-      overlayBlur: 1,
-      message: message,
-      duration: const Duration(seconds: 5),
-      forwardAnimationCurve: Curves.easeInOutQuart,
-      dismissDirection: SnackDismissDirection.HORIZONTAL,
-      snackPosition: SnackPosition.TOP,
-    ));
   }
 
 }

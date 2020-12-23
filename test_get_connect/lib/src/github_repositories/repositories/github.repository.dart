@@ -1,4 +1,4 @@
-import 'package:test_get_connect/src/github/model/repository.dart';
+import 'package:test_get_connect/src/github_repositories/model/repository.dart';
 
 abstract class GitHubRepository {
 
