@@ -10,21 +10,23 @@ class ChuckNorrisApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Chuck norris',
+      defaultTransition: Transition.topLevel,
       themeMode: ThemeMode.system,
       darkTheme: ThemeData.dark().copyWith(accentColor: Colors.orange[900]),
       initialBinding: ChuckNorrisBindings(),
       theme: ThemeData(
-          appBarTheme: AppBarTheme(
-              brightness: Brightness.light,
-              color: Colors.transparent,
-              elevation: 0,
-              centerTitle: true,
-              textTheme: Theme.of(context)
-                  .textTheme
-                  .copyWith(headline5: TextStyle(color: Colors.black)),
-              iconTheme: IconThemeData(color: Colors.black)),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          accentColor: Colors.orange[900]),
+        appBarTheme: AppBarTheme(
+            brightness: Brightness.light,
+            color: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            textTheme: Theme.of(context)
+                .textTheme
+                .copyWith(headline5: TextStyle(color: Colors.black)),
+            iconTheme: IconThemeData(color: Colors.black)),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        accentColor: Colors.orange[900]
+      ),
       getPages: routes,
     );
   }
