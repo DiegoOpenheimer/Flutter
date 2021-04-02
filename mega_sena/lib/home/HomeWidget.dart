@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:mega_sena/create_game/CreateGame.dart';
-import 'package:mega_sena/list_games/ListGame.dart';
+import 'package:mega_sena/home/GameViewModel.dart';
+import 'package:mega_sena/home/repository/GameRepositoryFactory.dart';
 import 'package:mega_sena/shared/components/MegaSenaContainer.dart';
+
+import 'fragments/create_game/CreateGame.dart';
+import 'fragments/list_games/ListGame.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -12,12 +17,35 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget>
     with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
-  TabController? _tabController;
+  final GameViewModel _gameViewModel = GameViewModel(gameRepository: GameRepositoryFactory.resolve(TypeGameRepository.SEMBAST));
+  late TabController _tabController = TabController(length: 2, vsync: this);
+  StreamSubscription? _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _streamSubscription = _gameViewModel.$message.stream.listen(handleMessage);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _tabController.dispose();
+    _gameViewModel.dispose();
+    _streamSubscription?.cancel();
+    super.dispose();
+  }
+
+  void handleMessage(String message) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      behavior: SnackBarBehavior.floating,
+      content: Text(message),
+      action: SnackBarAction(
+        onPressed: () {},
+        label: "Fechar",
+      ),
+    ));
   }
 
   @override
@@ -59,14 +87,17 @@ class _HomeWidgetState extends State<HomeWidget>
     return PageView(
       // physics: NeverScrollableScrollPhysics(),
       onPageChanged: (int page) {
-        _tabController?.animateTo(page);
+        _tabController.animateTo(page);
       },
       controller: _pageController,
       children: [
         ListGame(
           pageController: _pageController,
+          gameViewModel: _gameViewModel,
         ),
-        CreateGame()
+        CreateGame(
+          gameViewModel: _gameViewModel,
+        )
       ],
     );
   }

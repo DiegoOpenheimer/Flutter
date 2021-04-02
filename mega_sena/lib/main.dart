@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mega_sena/home/HomeWidget.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
@@ -50,7 +50,7 @@ class MegaSenaApp extends StatelessWidget {
               elevation: 0),
           accentColor: Colors.lightGreen,
           primarySwatch: Colors.green),
-      routes: <String, WidgetBuilder>{'/': (context) => HomeWidget()},
+      routes: <String, WidgetBuilder>{'/': (context) => HomeWidget()}
     );
   }
 }
