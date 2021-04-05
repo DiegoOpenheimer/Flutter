@@ -202,6 +202,7 @@ class _ListGameState extends State<ListGame>
       duration: const Duration(milliseconds: 300),
       child: isEditing
           ? TextField(
+              autofocus: true,
               onChanged: widget.gameViewModel.$searchField.add,
               decoration: InputDecoration(hintText: 'Buscar'),
             )
