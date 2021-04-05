@@ -162,8 +162,6 @@ class _ContainerInputNumbersState extends State<ContainerInputNumbers> {
           FilteringTextInputFormatter.allow(
               RegExp('^(?:[1-9]|[1-5][0-9]|60)\$'))
         ],
-        cursorColor: Colors.transparent,
-        cursorWidth: 0,
       ),
     );
   }

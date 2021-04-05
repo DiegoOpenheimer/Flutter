@@ -22,6 +22,7 @@ class ListGame extends StatefulWidget {
 class _ListGameState extends State<ListGame>
     with AutomaticKeepAliveClientMixin {
   double opacity = 1;
+  late int lastPosition = widget.pageController.offset.toInt();
 
   bool isEditing = false;
   AnimateIconController _iconController = AnimateIconController();
@@ -41,13 +42,14 @@ class _ListGameState extends State<ListGame>
     widget.gameViewModel.listenSearchGame();
     widget.pageController.addListener(() {
       setState(() {
-        double value = 0.5 -
+        double constant = widget.pageController.offset > lastPosition ? .5 : 1;
+        opacity = constant -
             widget.pageController.offset /
                 widget.pageController.position.maxScrollExtent;
-        if (value == 0.5) {
-          opacity = 1;
-        } else {
-          opacity = value;
+        if (widget.pageController.offset.toInt() ==
+                widget.pageController.position.maxScrollExtent.toInt() ||
+            widget.pageController.offset == 0) {
+          lastPosition = widget.pageController.offset.toInt();
         }
       });
     });
@@ -68,7 +70,9 @@ class _ListGameState extends State<ListGame>
           );
         }
         if (data.games.isEmpty) {
-          return Center(child: Text('Nenhum jogo registrado'),);
+          return Center(
+            child: Text('Nenhum jogo registrado'),
+          );
         }
         return ListView.builder(
             itemCount: data.filteredGames.length,
@@ -94,8 +98,8 @@ class _ListGameState extends State<ListGame>
   ListTile _buildListTile(Game game) {
     return ListTile(
       contentPadding: const EdgeInsets.only(left: 16),
-      title: Text(
-          game.gameNumber.isEmpty ? 'Sem identificação' : game.gameNumber),
+      title:
+          Text(game.gameNumber.isEmpty ? 'Sem identificação' : game.gameNumber),
       subtitle: Text(game.numbers),
       trailing: AnimatedOpacity(
         duration: Duration.zero,

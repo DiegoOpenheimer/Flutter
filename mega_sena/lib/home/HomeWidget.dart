@@ -75,7 +75,7 @@ class _HomeWidgetState extends State<HomeWidget>
           ],
           onTap: (index) {
             _pageController.animateToPage(index,
-                duration: const Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.decelerate);
           },
         ),
@@ -85,7 +85,6 @@ class _HomeWidgetState extends State<HomeWidget>
 
   Widget _body() {
     return PageView(
-      // physics: NeverScrollableScrollPhysics(),
       onPageChanged: (int page) {
         _tabController.animateTo(page);
       },
