@@ -24,6 +24,7 @@ class _ListGameState extends State<ListGame>
   double opacity = 1;
   late int lastPosition = widget.pageController.offset.toInt();
 
+  FocusNode _focusNode = FocusNode();
   bool isEditing = false;
   AnimateIconController _iconController = AnimateIconController();
 
@@ -188,6 +189,9 @@ class _ListGameState extends State<ListGame>
               onStartIconPress: () {
                 toggleEdit();
                 _iconController.animateToEnd();
+                Future.delayed(const Duration(milliseconds: 300)).then((_) {
+                  FocusScope.of(context).requestFocus(_focusNode);
+                });
                 return true;
               },
             ),
@@ -202,7 +206,7 @@ class _ListGameState extends State<ListGame>
       duration: const Duration(milliseconds: 300),
       child: isEditing
           ? TextField(
-              autofocus: true,
+              focusNode: _focusNode,
               onChanged: widget.gameViewModel.$searchField.add,
               decoration: InputDecoration(hintText: 'Buscar'),
             )
