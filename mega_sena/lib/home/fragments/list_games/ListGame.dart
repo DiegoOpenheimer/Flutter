@@ -32,7 +32,10 @@ class _ListGameState extends State<ListGame>
   Widget build(BuildContext context) {
     super.build(context);
     return Column(
-      children: [_buildAppBar(), Expanded(child: _buildList())],
+      children: [
+        _buildAppBar(),
+        Expanded(child: _buildList()),
+      ],
     );
   }
 
@@ -76,6 +79,7 @@ class _ListGameState extends State<ListGame>
           );
         }
         return ListView.builder(
+            padding: const EdgeInsets.only(bottom: 32),
             itemCount: data.filteredGames.length,
             itemBuilder: (_, int index) {
               Game game = data.filteredGames[index];
