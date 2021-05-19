@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mega_sena/shared/services/ConfigService.dart';
+import 'package:mega_sena/config/ConfigViewModel.dart';
+import 'package:mega_sena/services/ConfigService.dart';
 
 
 class ConfigWidget extends StatelessWidget {
 
-  final ConfigService _configService = ConfigService();
+  final ConfigViewModel _configViewModel = ConfigViewModel(configService: ConfigService());
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,8 @@ class ConfigWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Tema da aplicação: ', style: Theme.of(context).textTheme.headline6,),
-            _buildDropDownTheme(),
+            SizedBox(width: 32),
+            Expanded(child: _buildDropDownTheme()),
           ],
         )
       ],
@@ -38,19 +40,20 @@ class ConfigWidget extends StatelessWidget {
 
   Widget _buildDropDownTheme() {
     return StreamBuilder(
-      stream: _configService.currentTheme.stream,
+      stream: _configViewModel.stream,
       builder: (context, _) {
-        return DropdownButton<String>(
-              onChanged: (value) {
-                _configService.currentTheme.add(value!);
-              },
-              value: _configService.currentValue,
-              items: _configService.items
-              .map<DropdownMenuItem<String>>((item) => DropdownMenuItem<String>(
-                child: Text(item),
-                value: item
-              )).toList(),
-            );
+        return DropdownButton<ThemeMode>(
+          isExpanded: true,
+          onChanged: (value) {
+            _configViewModel.changeTheme(value!);
+          },
+          value: _configViewModel.currentTheme,
+          items: _configViewModel.items
+          .map<DropdownMenuItem<ThemeMode>>((item) => DropdownMenuItem<ThemeMode>(
+            child: Text(item.name),
+            value: item
+          )).toList(),
+          );
       },
     );
   }
