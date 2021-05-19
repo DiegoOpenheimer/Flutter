@@ -17,8 +17,7 @@ void main() async {
 }
 
 class MegaSenaApp extends StatelessWidget {
-  
-  final ConfigService _configService = ConfigService();  
+  final ConfigService _configService = ConfigService();
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +31,10 @@ class MegaSenaApp extends StatelessWidget {
 
   MaterialApp buildMaterialApp(BuildContext context) {
     return MaterialApp(
-    title: 'Mega sena',
-    darkTheme: AppTheme.dark,
-    themeMode: _configService.currentThemeValue,
-    theme: AppTheme.light(context),
-    routes: <String, WidgetBuilder>{'/': (context) => HomeWidget()}
-  );
+        title: 'Mega sena',
+        darkTheme: AppTheme.dark,
+        themeMode: _configService.currentThemeValue,
+        theme: AppTheme.light(context),
+        routes: <String, WidgetBuilder>{'/': (context) => HomeWidget()});
   }
 }

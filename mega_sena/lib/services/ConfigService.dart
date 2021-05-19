@@ -4,7 +4,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sembast/sembast.dart';
 
 extension ThemeModeExtension on ThemeMode {
-
   static Map<ThemeMode, String> values = {
     ThemeMode.system: 'Sistema',
     ThemeMode.dark: 'Escuro',
@@ -26,19 +25,25 @@ extension ThemeModeExtension on ThemeMode {
 }
 
 class ConfigService {
-
   static const String THEME_KEY = '@mega_senha/theme';
   static final ConfigService _instance = ConfigService._internal();
+
   ConfigService._internal();
+
   factory ConfigService() => _instance;
 
   MegaSenaDB megaSenaDB = MegaSenaDB();
   StoreRef store = StoreRef.main();
-  BehaviorSubject<ThemeMode> currentTheme = BehaviorSubject.seeded(ThemeMode.system);
+  BehaviorSubject<ThemeMode> currentTheme =
+      BehaviorSubject.seeded(ThemeMode.system);
+
   ThemeMode get currentThemeValue => currentTheme.value!;
 
-
-  final List<ThemeMode> items = [ThemeMode.system, ThemeMode.dark, ThemeMode.light];
+  final List<ThemeMode> items = [
+    ThemeMode.system,
+    ThemeMode.dark,
+    ThemeMode.light
+  ];
 
   Future<ThemeMode> loadThemeFromDb() async {
     Database database = await megaSenaDB.open();
@@ -57,5 +62,4 @@ class ConfigService {
   void dispose() {
     currentTheme.close();
   }
-
 }
