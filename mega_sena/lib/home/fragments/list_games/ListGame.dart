@@ -22,7 +22,6 @@ class ListGame extends StatefulWidget {
 class _ListGameState extends State<ListGame>
     with AutomaticKeepAliveClientMixin {
   double opacity = 1;
-  late int lastPosition = widget.pageController.offset.toInt();
 
   FocusNode _focusNode = FocusNode();
   bool isEditing = false;
@@ -45,17 +44,12 @@ class _ListGameState extends State<ListGame>
     widget.gameViewModel.loadGames();
     widget.gameViewModel.listenSearchGame();
     widget.pageController.addListener(() {
-      setState(() {
-        double constant = widget.pageController.offset > lastPosition ? .5 : 1;
-        opacity = constant -
-            widget.pageController.offset /
-                widget.pageController.position.maxScrollExtent;
-        if (widget.pageController.offset.toInt() ==
-                widget.pageController.position.maxScrollExtent.toInt() ||
-            widget.pageController.offset == 0) {
-          lastPosition = widget.pageController.offset.toInt();
-        }
-      });
+      double page = widget.pageController.page ?? 0;
+      if (page >= 0 && page <= 1) {
+        setState(() {
+          opacity = 1 - (page / 0.5);
+        });
+      }
     });
   }
 

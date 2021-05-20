@@ -1,28 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mega_sena/services/database/MegaSenaDB.dart';
+import 'package:mega_sena/shared/extension/ThemeExtension.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sembast/sembast.dart';
 
-extension ThemeModeExtension on ThemeMode {
-  static Map<ThemeMode, String> values = {
-    ThemeMode.system: 'Sistema',
-    ThemeMode.dark: 'Escuro',
-    ThemeMode.light: 'Claro',
-  };
-
-  String get name => ThemeModeExtension.values[this] ?? ThemeMode.system.name;
-
-  static ThemeMode getFromName(String? name) {
-    switch (name?.toLowerCase()) {
-      case 'escuro':
-        return ThemeMode.dark;
-      case 'claro':
-        return ThemeMode.light;
-      default:
-        return ThemeMode.system;
-    }
-  }
-}
 
 class ConfigService {
   static const String THEME_KEY = '@mega_senha/theme';

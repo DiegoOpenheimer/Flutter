@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mega_sena/config/ConfigViewModel.dart';
 import 'package:mega_sena/services/ConfigService.dart';
+import 'package:mega_sena/shared/extension/ThemeExtension.dart';
 
 
 class ConfigWidget extends StatelessWidget {
