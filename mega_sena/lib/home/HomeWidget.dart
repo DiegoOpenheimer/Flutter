@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:mega_sena/config/ConfigWidget.dart';
 import 'package:mega_sena/home/GameViewModel.dart';
 import 'package:mega_sena/home/repository/GameRepositoryFactory.dart';
 import 'package:mega_sena/shared/components/MegaSenaContainer.dart';
@@ -18,7 +19,7 @@ class _HomeWidgetState extends State<HomeWidget>
     with SingleTickerProviderStateMixin {
   final PageController _pageController = PageController();
   final GameViewModel _gameViewModel = GameViewModel(gameRepository: GameRepositoryFactory.resolve(TypeGameRepository.SEMBAST));
-  late TabController _tabController = TabController(length: 2, vsync: this);
+  late TabController _tabController = TabController(length: 3, vsync: this);
   StreamSubscription? _streamSubscription;
 
   @override
@@ -72,6 +73,13 @@ class _HomeWidgetState extends State<HomeWidget>
               ),
               title: 'Registrar',
             ),
+            TabItem(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              title: 'Configuração',
+            ),
           ],
           onTap: (index) {
             _pageController.animateToPage(index,
@@ -96,7 +104,8 @@ class _HomeWidgetState extends State<HomeWidget>
         ),
         CreateGame(
           gameViewModel: _gameViewModel,
-        )
+        ),
+        ConfigWidget(),
       ],
     );
   }

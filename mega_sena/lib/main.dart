@@ -1,56 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mega_sena/home/HomeWidget.dart';
+import 'package:mega_sena/services/ConfigService.dart';
+import 'package:mega_sena/shared/theme/AppTheme.dart';
+
+Future<void> init() async {
+  await ConfigService().loadThemeFromDb();
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  await init();
   runApp(MegaSenaApp());
 }
 
 class MegaSenaApp extends StatelessWidget {
-  TextTheme getTextThemeDark() {
-    TextStyle style = TextStyle(color: Colors.white);
-    return TextTheme(
-      bodyText1: style,
-      bodyText2: style,
-      button: style,
-      caption: style,
-      headline1: style,
-      headline2: style,
-      headline3: style,
-      headline4: style,
-      headline5: style,
-      headline6: style,
-    );
-  }
+  final ConfigService _configService = ConfigService();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Mega sena',
-      darkTheme: ThemeData.dark().copyWith(
-        textTheme: GoogleFonts.ptSansTextTheme(getTextThemeDark()),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: GoogleFonts.ptSansTextTheme(),
-          primaryTextTheme:
-              TextTheme(headline6: TextStyle(color: Colors.black)),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.green))),
-          appBarTheme: AppBarTheme(
-              iconTheme: IconThemeData(color: Colors.black),
-              color: Theme.of(context).scaffoldBackgroundColor,
-              elevation: 0),
-          accentColor: Colors.lightGreen,
-          primarySwatch: Colors.green),
-      routes: <String, WidgetBuilder>{'/': (context) => HomeWidget()}
+    return StreamBuilder(
+      stream: _configService.currentTheme.stream,
+      builder: (context, _) {
+        return buildMaterialApp(context);
+      },
     );
+  }
+
+  MaterialApp buildMaterialApp(BuildContext context) {
+    return MaterialApp(
+        title: 'Mega sena',
+        darkTheme: AppTheme.dark,
+        themeMode: _configService.currentThemeValue,
+        theme: AppTheme.light(context),
+        routes: <String, WidgetBuilder>{'/': (context) => HomeWidget()});
   }
 }
