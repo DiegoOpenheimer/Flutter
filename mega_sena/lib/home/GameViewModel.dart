@@ -13,7 +13,7 @@ import 'package:share/share.dart';
 
 class GameViewModel with GameData {
   static const int AMOUNT_OF_VALUES_DEFAULT = 6;
-  static const int MAX_AMOUNT_OF_VALUES_DEFAULT = 10;
+  static const int MAX_AMOUNT_OF_VALUES_DEFAULT = 15;
   static const int MAX_NUMBER_GAMES = 60;
 
   List<DataHelper> dataHelper = [];

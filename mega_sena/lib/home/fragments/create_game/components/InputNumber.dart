@@ -38,19 +38,11 @@ class _ContainerInputNumbersState extends State<ContainerInputNumbers> {
           decoration: InputDecoration(hintText: 'Número do sorteio (opcional)'),
         ),
         SizedBox(
-          height: 32,
-        ),
-        buildWrap(),
-        SizedBox(
-          height: 32,
-        ),
-        _buildActions(),
-        SizedBox(
-          height: 32,
+          height: 16,
         ),
         _buildSlider(),
         SizedBox(
-          height: 32,
+          height: 16,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -95,6 +87,10 @@ class _ContainerInputNumbersState extends State<ContainerInputNumbers> {
             ),
           ],
         ),
+        SizedBox(
+          height: 16,
+        ),
+        buildWrap(),
         SizedBox(
           height: 32,
         ),
@@ -164,39 +160,5 @@ class _ContainerInputNumbersState extends State<ContainerInputNumbers> {
         ],
       ),
     );
-  }
-
-  Widget _buildActions() {
-    return ValueListenableBuilder(
-        valueListenable: widget.gameViewModel.isFilled,
-        builder: (BuildContext _, bool isFilled, Widget? ___) {
-          if (isFilled) {
-            return TweenAnimationBuilder(
-                curve: Curves.elasticInOut,
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(seconds: 1),
-                builder: (context, double value, Widget? _) {
-                  return Transform.scale(
-                    scale: value.clamp(0.0, 1.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            icon: Icon(Icons.copy),
-                            onPressed: widget.gameViewModel.copyText),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Visibility(
-                            visible: Platform.isAndroid || Platform.isIOS,
-                            child: IconButton(
-                                icon: Icon(Icons.share), onPressed: widget.gameViewModel.shareGame))
-                      ],
-                    ),
-                  );
-                });
-          }
-          return Container();
-        });
   }
 }
