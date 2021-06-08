@@ -205,7 +205,7 @@ class _ListGameState extends State<ListGame>
       child: isEditing
           ? TextField(
               focusNode: _focusNode,
-              onChanged: widget.gameViewModel.$searchField.add,
+              onChanged: widget.gameViewModel.searchField$.add,
               decoration: InputDecoration(hintText: 'Buscar'),
             )
           : Container(

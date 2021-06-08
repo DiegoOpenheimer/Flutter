@@ -22,8 +22,8 @@ class GameViewModel with GameData {
   ValueNotifier<List<Game>> games = ValueNotifier([]);
   ValueNotifier<List<String>> generatedValues = ValueNotifier([]);
   ValueNotifier<bool> isFilled = ValueNotifier(false);
-  PublishSubject<String> $message = PublishSubject();
-  PublishSubject<String> $searchField = PublishSubject();
+  PublishSubject<String> message$ = PublishSubject();
+  PublishSubject<String> searchField$ = PublishSubject();
   StreamSubscription? _streamSearchText;
 
   GameViewModel({required this.gameRepository}) {
@@ -36,7 +36,7 @@ class GameViewModel with GameData {
   /// listening for search game.
   void listenSearchGame() {
     _streamSearchText?.cancel();
-    _streamSearchText = $searchField.stream
+    _streamSearchText = searchField$.stream
         .debounceTime(const Duration(milliseconds: 300))
         .listen((value) {
       List<Game> newFiltered = data.games.where((game) {
@@ -122,15 +122,15 @@ class GameViewModel with GameData {
           .map((e) => e.controller.text)
           .toList();
       if (values.length < AMOUNT_OF_VALUES_DEFAULT) {
-        $message.add('Primeiramente gere os valores.');
+        message$.add('Primeiramente gere os valores.');
         return;
       }
       Game game = Game(gameNumber: gameNumber ?? '', numbers: values.join(" - "));
       await gameRepository.save(game);
       addEvent(games: data.games..insert(0, game));
-      $message.add("Jogo registrado com sucesso");
+      message$.add("Jogo registrado com sucesso");
     } catch (e) {
-      $message.add("Falha ao salvar jogo");
+      message$.add("Falha ao salvar jogo");
     }
   }
 
@@ -154,9 +154,9 @@ class GameViewModel with GameData {
     try {
       String value = _extractValue(game: game);
       await Clipboard.setData(ClipboardData(text: value));
-      $message.add("Valores copiados $value");
+      message$.add("Valores copiados $value");
     } catch (e) {
-      $message.add("Falha ao fazer cópia");
+      message$.add("Falha ao fazer cópia");
     }
   }
 
@@ -165,7 +165,7 @@ class GameViewModel with GameData {
     try {
       await Share.share(_extractValue(game: game), subject: 'Mega sena');
     } catch (_) {
-      $message.add('Falha ao compartilhar jogo');
+      message$.add('Falha ao compartilhar jogo');
     }
   }
 
@@ -179,17 +179,17 @@ class GameViewModel with GameData {
                   element.createdAt.microsecondsSinceEpoch !=
                   game.createdAt.microsecondsSinceEpoch)
               .toList());
-      $message.add('Jogo removido com sucesso');
+      message$.add('Jogo removido com sucesso');
     } catch (e) {
-      $message.add('Falha ao remover jogo');
+      message$.add('Falha ao remover jogo');
     }
   }
 
   /// dispose events.
   void dispose() {
-    $message.close();
-    $searchField.close();
+    message$.close();
+    searchField$.close();
     _streamSearchText?.cancel();
-    dispose();
+    super.dispose();
   }
 }

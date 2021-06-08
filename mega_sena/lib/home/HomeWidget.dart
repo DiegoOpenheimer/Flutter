@@ -25,7 +25,7 @@ class _HomeWidgetState extends State<HomeWidget>
   @override
   void initState() {
     super.initState();
-    _streamSubscription = _gameViewModel.$message.stream.listen(handleMessage);
+    _streamSubscription = _gameViewModel.message$.stream.listen(handleMessage);
   }
 
   @override
