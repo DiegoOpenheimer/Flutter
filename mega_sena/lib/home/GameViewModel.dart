@@ -29,7 +29,7 @@ class GameViewModel with GameData {
   GameViewModel({required this.gameRepository}) {
     for (int i = 0; i < AMOUNT_OF_VALUES_DEFAULT; i++) {
       dataHelper.add(
-          DataHelper(controller: TextEditingController(), typedValue: false));
+          DataHelper(controller: TextEditingController(), typedValue: false, key: Key('input_game_$i')));
     }
   }
 
@@ -81,7 +81,12 @@ class GameViewModel with GameData {
     } else {
       for (int i = 0; i < value; i++) {
         dataHelper.add(
-            DataHelper(controller: TextEditingController(), typedValue: false));
+          DataHelper(
+            controller: TextEditingController(),
+            typedValue: false,
+            key: Key('input_game_${dataHelper.length + i}')
+          )
+        );
       }
     }
     this.amountValues.value = amountValues.toInt();
@@ -125,7 +130,8 @@ class GameViewModel with GameData {
         message$.add('Primeiramente gere os valores.');
         return;
       }
-      Game game = Game(gameNumber: gameNumber ?? '', numbers: values.join(" - "));
+      Game game =
+          Game(gameNumber: gameNumber ?? '', numbers: values.join(" - "));
       await gameRepository.save(game);
       addEvent(games: data.games..insert(0, game));
       message$.add("Jogo registrado com sucesso");
@@ -149,7 +155,6 @@ class GameViewModel with GameData {
     return valueToCopy;
   }
 
-  /// copy text to cell phone
   Future<void> copyText({Game? game}) async {
     try {
       String value = _extractValue(game: game);
@@ -160,7 +165,6 @@ class GameViewModel with GameData {
     }
   }
 
-  /// share the game
   Future<void> shareGame({Game? game}) async {
     try {
       await Share.share(_extractValue(game: game), subject: 'Mega sena');
@@ -169,7 +173,6 @@ class GameViewModel with GameData {
     }
   }
 
-  /// remove game
   Future delete({required Game game}) async {
     try {
       await gameRepository.delete(game);

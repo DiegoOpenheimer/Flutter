@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -145,6 +143,7 @@ class _ContainerInputNumbersState extends State<ContainerInputNumbers> {
           border: Border.all(color: Utils.getColorAccordingTheme(context)),
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: TextField(
+        key: dataHelper.key,
         onChanged: (text) => widget.gameViewModel.changeText(text, dataHelper),
         controller: dataHelper.controller,
         textAlign: TextAlign.center,

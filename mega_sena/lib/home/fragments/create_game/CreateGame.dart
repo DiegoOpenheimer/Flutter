@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mega_sena/home/GameViewModel.dart';
-import 'package:mega_sena/home/fragments/create_game/components/InputNumber.dart';
+import 'package:mega_sena/home/fragments/create_game/components/ContainerGameInput.dart';
 
 class CreateGame extends StatefulWidget {
   final GameViewModel gameViewModel;
