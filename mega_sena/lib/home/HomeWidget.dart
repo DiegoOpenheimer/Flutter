@@ -11,13 +11,18 @@ import 'fragments/create_game/CreateGame.dart';
 import 'fragments/list_games/ListGame.dart';
 
 class HomeWidget extends StatefulWidget {
+
+  final PageController? _pageController;
+
+  HomeWidget([this._pageController]);
+
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
 class _HomeWidgetState extends State<HomeWidget>
     with SingleTickerProviderStateMixin {
-  final PageController _pageController = PageController();
+  late final PageController _pageController = widget._pageController ?? PageController();
   final GameViewModel _gameViewModel = GameViewModel(gameRepository: GameRepositoryFactory.resolve(TypeGameRepository.SEMBAST));
   late TabController _tabController = TabController(length: 3, vsync: this);
   StreamSubscription? _streamSubscription;
